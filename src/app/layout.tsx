@@ -6,6 +6,7 @@ import { Providers } from "@/components/providers";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "@/app/api/uploadthing/core";
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "Slather - Share Your Sandwich Experience",
@@ -26,6 +27,30 @@ export default function RootLayout({
       >
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
         <Providers>{children}</Providers>
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            style: {
+              background: "#FFFFFF",
+              color: "#191310",
+              border: "1px solid #eccebf",
+            },
+            success: {
+              duration: 3000,
+              iconTheme: {
+                primary: "#eccebf",
+                secondary: "#191310",
+              },
+            },
+            error: {
+              duration: 4000,
+              iconTheme: {
+                primary: "#f87171",
+                secondary: "#ffffff",
+              },
+            },
+          }}
+        />
       </body>
     </html>
   );

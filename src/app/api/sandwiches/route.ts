@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { createSandwichSchema } from "@/lib/validations"
-import { PrismaClient } from "@prisma/client"
+import { PrismaClient, SandwichType } from "@prisma/client"
 
 // Extend the Session type to include user ID
 interface ExtendedSession {
@@ -14,6 +14,17 @@ interface ExtendedSession {
     id?: string;
   }
 }
+
+// Define type for sandwich data instead of using 'any'
+type SandwichCreateInput = {
+  title: string;
+  description?: string | null;
+  type: SandwichType;
+  images: string[];
+  ingredients: string[];
+  restaurantId?: string | null;
+  userId: string;
+};
 
 export async function POST(request: NextRequest) {
   try {
@@ -67,13 +78,14 @@ export async function POST(request: NextRequest) {
       }
 
       // Create the sandwich data object with optional user ID
-      const sandwichData: any = {
+      const sandwichData: SandwichCreateInput = {
         title,
         description,
         type,
         images: images || [],
         ingredients: type === "HOMEMADE" && ingredients ? ingredients.split(',').map(i => i.trim()) : [],
         restaurantId,
+        userId: '', // This will be set below either from session or from a newly created anonymous user
       }
       
       // Only add userId if the user is authenticated
