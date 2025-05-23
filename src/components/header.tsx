@@ -2,17 +2,51 @@
 
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
-import { Bell, User, LogOut, Menu, X, Home, Compass, Plus, Search } from "lucide-react"
-import { useState, useEffect } from "react"
+import { Bell, User, LogOut, Menu, X, Home, Compass, Plus, Search, ArrowRight } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
 import { ThemeToggle } from "./ui"
+import { useRouter, usePathname } from "next/navigation"
 
 export function Header() {
+  const router = useRouter()
+  const pathname = usePathname()
   const { data: session, status } = useSession()
   const [menuOpen, setMenuOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [isFocused, setIsFocused] = useState(false)
+  const [mobileFocused, setMobileFocused] = useState(false)
+  const searchRef = useRef<HTMLDivElement>(null)
+  const mobileSearchRef = useRef<HTMLDivElement>(null)
   
   const isAuthenticated = status === "authenticated" && session?.user
+
+  // Handle search submit
+  const handleSearchSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    
+    if (searchQuery.trim()) {
+      router.push(`/discover?q=${encodeURIComponent(searchQuery.trim())}`)
+      setIsFocused(false)
+      setMobileFocused(false)
+      setSearchQuery("")
+    }
+  }
+
+  // Handle outside click for search dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsFocused(false)
+      }
+      if (mobileSearchRef.current && !mobileSearchRef.current.contains(event.target as Node)) {
+        setMobileFocused(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   // Handle scroll effect
   useEffect(() => {
@@ -70,25 +104,91 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center">
-            <div className="mr-8 bg-background-secondary dark:bg-background-secondary rounded-full px-4 py-2 flex items-center gap-2 shadow-sm hover:shadow transition-all">
-              <Search size={16} className="text-text-secondary dark:text-text-secondary" />
-              <input 
-                type="text" 
-                placeholder="Search for sandwiches..." 
-                className="bg-transparent border-none outline-none text-sm w-44 text-text-primary dark:text-text-primary placeholder:text-text-secondary dark:placeholder:text-text-secondary"
-              />
+            <div className="mr-8 relative" ref={searchRef}>
+              <form onSubmit={handleSearchSubmit}>
+                <div className={`bg-background-secondary dark:bg-background-secondary rounded-full px-4 py-2 flex items-center gap-2 shadow-sm hover:shadow transition-all ${isFocused ? 'ring-2 ring-accent-primary' : ''}`}>
+                  <Search size={16} className="text-text-secondary dark:text-text-secondary" />
+                  <input 
+                    type="text" 
+                    placeholder="Search for sandwiches..." 
+                    className="bg-transparent border-none outline-none text-sm w-44 text-text-primary dark:text-text-primary placeholder:text-text-secondary dark:placeholder:text-text-secondary"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={() => setIsFocused(true)}
+                  />
+                  {searchQuery && (
+                    <button 
+                      type="submit"
+                      className="ml-1 p-1 rounded-full hover:bg-background hover:dark:bg-background text-text-secondary hover:text-accent-primary"
+                    >
+                      <ArrowRight size={14} />
+                    </button>
+                  )}
+                </div>
+              </form>
+              
+              {/* Search dropdown (only show when focused and has query) */}
+              {isFocused && searchQuery && (
+                <div className="absolute top-full mt-2 w-full bg-white dark:bg-background-secondary rounded-xl shadow-soft-lg border border-border-color dark:border-border-color overflow-hidden z-20">
+                  <div className="p-2">
+                    <div 
+                      className="flex items-center gap-2 p-2 hover:bg-background-secondary dark:hover:bg-background rounded-lg cursor-pointer"
+                      onClick={handleSearchSubmit}
+                    >
+                      <Search size={14} className="text-accent-primary" />
+                      <span className="text-sm text-text-primary dark:text-text-primary">
+                        Search for <strong>"{searchQuery}"</strong>
+                      </span>
+                    </div>
+                    <div 
+                      className="flex items-center gap-2 p-2 hover:bg-background-secondary dark:hover:bg-background rounded-lg cursor-pointer"
+                      onClick={() => {
+                        router.push(`/discover?type=RESTAURANT&q=${encodeURIComponent(searchQuery)}`)
+                        setIsFocused(false)
+                        setSearchQuery("")
+                      }}
+                    >
+                      <span className="text-base">🏢</span>
+                      <span className="text-sm text-text-primary dark:text-text-primary">
+                        Search restaurants for <strong>"{searchQuery}"</strong>
+                      </span>
+                    </div>
+                    <div 
+                      className="flex items-center gap-2 p-2 hover:bg-background-secondary dark:hover:bg-background rounded-lg cursor-pointer"
+                      onClick={() => {
+                        router.push(`/discover?type=HOMEMADE&q=${encodeURIComponent(searchQuery)}`)
+                        setIsFocused(false)
+                        setSearchQuery("")
+                      }}
+                    >
+                      <span className="text-base">🏠</span>
+                      <span className="text-sm text-text-primary dark:text-text-primary">
+                        Search homemade for <strong>"{searchQuery}"</strong>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             
             <nav className="flex items-center gap-6">
               <Link 
-                className="flex items-center gap-2 text-text-primary dark:text-text-primary text-sm font-medium leading-normal hover:text-accent-primary transition-all duration-200" 
+                className={`flex items-center gap-2 text-sm font-medium leading-normal transition-all duration-200 ${
+                  pathname === '/' 
+                    ? 'text-accent-primary' 
+                    : 'text-text-primary dark:text-text-primary hover:text-accent-primary'
+                }`}
                 href="/"
               >
                 <Home size={18} />
                 <span>Home</span>
               </Link>
               <Link 
-                className="flex items-center gap-2 text-text-primary dark:text-text-primary text-sm font-medium leading-normal hover:text-accent-primary transition-all duration-200" 
+                className={`flex items-center gap-2 text-sm font-medium leading-normal transition-all duration-200 ${
+                  pathname === '/discover' 
+                    ? 'text-accent-primary' 
+                    : 'text-text-primary dark:text-text-primary hover:text-accent-primary'
+                }`}
                 href="/discover"
               >
                 <Compass size={18} />
@@ -111,14 +211,6 @@ export function Header() {
             {/* Theme Toggle */}
             <ThemeToggle />
             
-            {/* Notifications (Desktop only when authenticated) */}
-            {isAuthenticated && (
-              <button className="hidden lg:flex items-center justify-center w-10 h-10 bg-white dark:bg-background-secondary hover:bg-background-secondary dark:hover:bg-background rounded-full shadow-soft transition-all duration-200 relative">
-                <Bell size={18} className="text-text-primary dark:text-text-primary" />
-                {/* Notification indicator */}
-                <span className="absolute -top-0.5 -right-0.5 size-3 bg-accent-primary rounded-full border-2 border-white dark:border-background-secondary"></span>
-              </button>
-            )}
             
             {/* User Profile */}
             {isAuthenticated ? (
@@ -237,15 +329,73 @@ export function Header() {
           </div>
 
           {/* Mobile Search */}
-          <div className="px-6 pt-4">
-            <div className="bg-background-secondary dark:bg-background rounded-full px-4 py-3 flex items-center gap-2 w-full">
-              <Search size={18} className="text-text-secondary dark:text-text-secondary" />
-              <input 
-                type="text" 
-                placeholder="Search for sandwiches..." 
-                className="bg-transparent border-none outline-none text-sm w-full text-text-primary dark:text-text-primary placeholder:text-text-secondary dark:placeholder:text-text-secondary"
-              />
-            </div>
+          <div className="px-6 pt-4" ref={mobileSearchRef}>
+            <form onSubmit={handleSearchSubmit}>
+              <div className={`bg-background-secondary dark:bg-background rounded-full px-4 py-3 flex items-center gap-2 w-full ${mobileFocused ? 'ring-2 ring-accent-primary' : ''}`}>
+                <Search size={18} className="text-text-secondary dark:text-text-secondary" />
+                <input 
+                  type="text" 
+                  placeholder="Search for sandwiches..." 
+                  className="bg-transparent border-none outline-none text-sm w-full text-text-primary dark:text-text-primary placeholder:text-text-secondary dark:placeholder:text-text-secondary"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setMobileFocused(true)}
+                />
+                {searchQuery && (
+                  <button 
+                    type="submit"
+                    className="p-1 rounded-full hover:bg-background-secondary/50 text-text-secondary hover:text-accent-primary"
+                  >
+                    <ArrowRight size={16} />
+                  </button>
+                )}
+              </div>
+            </form>
+            
+            {/* Mobile search dropdown */}
+            {mobileFocused && searchQuery && (
+              <div className="mt-2 bg-white dark:bg-background-secondary rounded-xl shadow-soft border border-border-color dark:border-border-color overflow-hidden">
+                <div className="p-2">
+                  <div 
+                    className="flex items-center gap-2 p-2 hover:bg-background-secondary dark:hover:bg-background rounded-lg cursor-pointer"
+                    onClick={handleSearchSubmit}
+                  >
+                    <Search size={16} className="text-accent-primary" />
+                    <span className="text-sm text-text-primary dark:text-text-primary">
+                      Search for <strong>"{searchQuery}"</strong>
+                    </span>
+                  </div>
+                  <div 
+                    className="flex items-center gap-2 p-2 hover:bg-background-secondary dark:hover:bg-background rounded-lg cursor-pointer"
+                    onClick={() => {
+                      router.push(`/discover?type=RESTAURANT&q=${encodeURIComponent(searchQuery)}`)
+                      setMobileFocused(false)
+                      setMobileMenuOpen(false)
+                      setSearchQuery("")
+                    }}
+                  >
+                    <span className="text-base">🏢</span>
+                    <span className="text-sm text-text-primary dark:text-text-primary">
+                      Search restaurants for <strong>"{searchQuery}"</strong>
+                    </span>
+                  </div>
+                  <div 
+                    className="flex items-center gap-2 p-2 hover:bg-background-secondary dark:hover:bg-background rounded-lg cursor-pointer"
+                    onClick={() => {
+                      router.push(`/discover?type=HOMEMADE&q=${encodeURIComponent(searchQuery)}`)
+                      setMobileFocused(false)
+                      setMobileMenuOpen(false)
+                      setSearchQuery("")
+                    }}
+                  >
+                    <span className="text-base">🏠</span>
+                    <span className="text-sm text-text-primary dark:text-text-primary">
+                      Search homemade for <strong>"{searchQuery}"</strong>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Content */}
@@ -253,24 +403,44 @@ export function Header() {
             <div className="space-y-2">
               <Link 
                 href="/"
-                className="flex items-center gap-4 p-3 rounded-xl hover:bg-background-secondary dark:hover:bg-background transition-colors"
+                className={`flex items-center gap-4 p-3 rounded-xl hover:bg-background-secondary dark:hover:bg-background transition-colors ${
+                  pathname === '/' ? 'bg-background-secondary dark:bg-background' : ''
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <div className="flex items-center justify-center w-10 h-10 bg-white dark:bg-background-secondary rounded-full shadow-sm">
-                  <Home size={18} className="text-accent-primary" />
+                <div className={`flex items-center justify-center w-10 h-10 rounded-full shadow-sm ${
+                  pathname === '/' 
+                    ? 'bg-accent-primary/20 dark:bg-accent-primary/20' 
+                    : 'bg-white dark:bg-background-secondary'
+                }`}>
+                  <Home size={18} className={`${pathname === '/' ? 'text-accent-primary' : 'text-accent-primary'}`} />
                 </div>
-                <span className="text-text-primary dark:text-text-primary font-medium">Home</span>
+                <span className={`font-medium ${
+                  pathname === '/' 
+                    ? 'text-accent-primary' 
+                    : 'text-text-primary dark:text-text-primary'
+                }`}>Home</span>
               </Link>
               
               <Link 
                 href="/discover"
-                className="flex items-center gap-4 p-3 rounded-xl hover:bg-background-secondary dark:hover:bg-background transition-colors"
+                className={`flex items-center gap-4 p-3 rounded-xl hover:bg-background-secondary dark:hover:bg-background transition-colors ${
+                  pathname === '/discover' ? 'bg-background-secondary dark:bg-background' : ''
+                }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <div className="flex items-center justify-center w-10 h-10 bg-white dark:bg-background-secondary rounded-full shadow-sm">
+                <div className={`flex items-center justify-center w-10 h-10 rounded-full shadow-sm ${
+                  pathname === '/discover' 
+                    ? 'bg-accent-primary/20 dark:bg-accent-primary/20' 
+                    : 'bg-white dark:bg-background-secondary'
+                }`}>
                   <Compass size={18} className="text-accent-primary" />
                 </div>
-                <span className="text-text-primary dark:text-text-primary font-medium">Explore</span>
+                <span className={`font-medium ${
+                  pathname === '/discover' 
+                    ? 'text-accent-primary' 
+                    : 'text-text-primary dark:text-text-primary'
+                }`}>Explore</span>
               </Link>
 
               {isAuthenticated && (
@@ -290,24 +460,36 @@ export function Header() {
 
                   <Link 
                     href="/profile"
-                    className="flex items-center gap-4 p-3 rounded-xl hover:bg-background-secondary dark:hover:bg-background transition-colors"
+                    className={`flex items-center gap-4 p-3 rounded-xl hover:bg-background-secondary dark:hover:bg-background transition-colors ${
+                      pathname === '/profile' ? 'bg-background-secondary dark:bg-background' : ''
+                    }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <div className="flex items-center justify-center w-10 h-10 bg-white dark:bg-background-secondary rounded-full shadow-sm">
                       <User size={18} className="text-accent-primary" />
                     </div>
-                    <span className="text-text-primary dark:text-text-primary font-medium">Profile</span>
+                    <span className={`font-medium ${
+                      pathname === '/profile' 
+                        ? 'text-accent-primary' 
+                        : 'text-text-primary dark:text-text-primary'
+                    }`}>Profile</span>
                   </Link>
 
                   <Link 
                     href="/my-sandwiches"
-                    className="flex items-center gap-4 p-3 rounded-xl hover:bg-background-secondary dark:hover:bg-background transition-colors"
+                    className={`flex items-center gap-4 p-3 rounded-xl hover:bg-background-secondary dark:hover:bg-background transition-colors ${
+                      pathname === '/my-sandwiches' ? 'bg-background-secondary dark:bg-background' : ''
+                    }`}
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <div className="flex items-center justify-center w-10 h-10 bg-white dark:bg-background-secondary rounded-full shadow-sm text-base">
                       🥪
                     </div>
-                    <span className="text-text-primary dark:text-text-primary font-medium">My Sandwiches</span>
+                    <span className={`font-medium ${
+                      pathname === '/my-sandwiches' 
+                        ? 'text-accent-primary' 
+                        : 'text-text-primary dark:text-text-primary'
+                    }`}>My Sandwiches</span>
                   </Link>
 
                   <button 
