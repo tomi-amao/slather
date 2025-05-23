@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  /* Modern color palette */
+  /* Modern color palette - Light Mode */
   --background: #f8f9fa;
   --background-secondary: #edf2f7;
   --text-primary: #2d3748;
@@ -17,6 +17,23 @@
   --error: #fc8181;
   --radio-dot-svg: url('data:image/svg+xml,%3csvg viewBox=%270 0 16 16%27 fill=%27rgb(66,153,225)%27 xmlns=%27http://www.w3.org/2000/svg%27%3e%3ccircle cx=%278%27 cy=%278%27 r=%273%27/%3e%3c/svg%3e');
   --select-button-svg: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724px%27 height=%2724px%27 fill=%27rgb(113,128,150)%27 viewBox=%270 0 256 256%27%3e%3cpath d=%27M181.66,170.34a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-48-48a8,8,0,0,1,11.32-11.32L128,212.69l42.34-42.35A8,8,0,0,1,181.66,170.34Zm-96-84.68L128,43.31l42.34,42.35a8,8,0,0,0,11.32-11.32l-48-48a8,8,0,0,0-11.32,0l-48,48A8,8,0,0,0,85.66,85.66Z%27%3e%3c/path%3e%3c/svg%3e');
+}
+
+.dark {
+  /* Dark Mode Colors */
+  --background: #1a202c;
+  --background-secondary: #2d3748;
+  --text-primary: #f7fafc;
+  --text-secondary: #cbd5e0;
+  --border-color: #4a5568;
+  --accent-primary: #4299e1;
+  --accent-secondary: #63b3ed;
+  --accent-tertiary: #a3bffa;
+  --success: #48bb78;
+  --warning: #ecc94b;
+  --error: #f56565;
+  --radio-dot-svg: url('data:image/svg+xml,%3csvg viewBox=%270 0 16 16%27 fill=%27rgb(66,153,225)%27 xmlns=%27http://www.w3.org/2000/svg%27%3e%3ccircle cx=%278%27 cy=%278%27 r=%273%27/%3e%3c/svg%3e');
+  --select-button-svg: url('data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2724px%27 height=%2724px%27 fill=%27rgb(203,213,224)%27 viewBox=%270 0 256 256%27%3e%3cpath d=%27M181.66,170.34a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-48-48a8,8,0,0,1,11.32-11.32L128,212.69l42.34-42.35A8,8,0,0,1,181.66,170.34Zm-96-84.68L128,43.31l42.34,42.35a8,8,0,0,0,11.32-11.32l-48-48a8,8,0,0,0-11.32,0l-48,48A8,8,0,0,0,85.66,85.66Z%27%3e%3c/path%3e%3c/svg%3e');
 }
 
 * {
@@ -62,7 +79,7 @@ a {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
 }
 
-.glass-dark {
+.dark .glass {
   background: rgba(45, 55, 72, 0.7);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -79,6 +96,16 @@ a {
 .shadow-soft-lg {
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 
               0 10px 10px -5px rgba(0, 0, 0, 0.02);
+}
+
+.dark .shadow-soft {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 
+              0 4px 6px -2px rgba(0, 0, 0, 0.15);
+}
+
+.dark .shadow-soft-lg {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25), 
+              0 10px 10px -5px rgba(0, 0, 0, 0.15);
 }
 
 /* Custom animations - keeping but refining */
@@ -179,6 +206,16 @@ input:focus-visible {
   animation: shimmer 2s infinite;
 }
 
+.dark .loading-shimmer {
+  background: linear-gradient(90deg, 
+    var(--background-secondary) 25%, 
+    rgba(45, 55, 72, 0.5) 50%, 
+    var(--background-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
@@ -246,6 +283,14 @@ input:focus-visible {
   background: linear-gradient(135deg, rgba(237, 242, 247, 0.8) 0%, rgba(237, 242, 247, 0.3) 100%);
 }
 
+.dark .gradient-subtle {
+  background: linear-gradient(135deg, rgba(45, 55, 72, 0.8) 0%, rgba(45, 55, 72, 0.3) 100%);
+}
+
 .gradient-subtle-accent {
   background: linear-gradient(135deg, rgba(66, 153, 225, 0.1) 0%, rgba(163, 191, 250, 0.2) 100%);
+}
+
+.dark .gradient-subtle-accent {
+  background: linear-gradient(135deg, rgba(66, 153, 225, 0.2) 0%, rgba(163, 191, 250, 0.3) 100%);
 }

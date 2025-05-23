@@ -20,9 +20,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className="relative flex size-full min-h-screen flex-col bg-[#fbfaf9] group/design-root overflow-x-hidden"
+        className="relative flex size-full min-h-screen flex-col bg-background dark:bg-background overflow-x-hidden"
         style={{ fontFamily: '"Plus Jakarta Sans", "Noto Sans", sans-serif' }}
       >
         <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
@@ -31,22 +31,22 @@ export default function RootLayout({
           position="bottom-right"
           toastOptions={{
             style: {
-              background: "#FFFFFF",
-              color: "#191310",
-              border: "1px solid #eccebf",
+              background: "var(--background-secondary)",
+              color: "var(--text-primary)",
+              border: "1px solid var(--border-color)",
             },
             success: {
               duration: 3000,
               iconTheme: {
-                primary: "#eccebf",
-                secondary: "#191310",
+                primary: "var(--accent-primary)",
+                secondary: "var(--background)",
               },
             },
             error: {
               duration: 4000,
               iconTheme: {
-                primary: "#f87171",
-                secondary: "#ffffff",
+                primary: "var(--error)",
+                secondary: "var(--background)",
               },
             },
           }}

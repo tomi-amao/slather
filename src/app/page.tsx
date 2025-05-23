@@ -76,10 +76,10 @@ function HeroSection() {
       
       <div className="relative z-10 flex flex-col items-center text-center">
         <div className="text-5xl mb-6 animate-float">🥪</div>
-        <h1 className="text-2xl lg:text-3xl font-bold text-text-primary mb-3 tracking-tight">
+        <h1 className="text-2xl lg:text-3xl font-bold text-text-primary dark:text-text-primary mb-3 tracking-tight">
           Rate, Share, Discover
         </h1>
-        <p className="text-text-secondary text-lg max-w-lg mb-8">
+        <p className="text-text-secondary dark:text-text-secondary text-lg max-w-lg mb-8">
           Find your next amazing sandwich or share that epic bite you just had
         </p>
         <Link 
@@ -125,11 +125,11 @@ function FeatureCards() {
           key={index}
           className="glass p-5 rounded-xl text-center hover:shadow-soft-lg transition-all duration-300 hover:translate-y-[-2px]"
         >
-          <div className="mx-auto size-12 bg-white rounded-full flex items-center justify-center shadow-soft mb-4 text-accent-primary">
+          <div className="mx-auto size-12 bg-white dark:bg-background-secondary rounded-full flex items-center justify-center shadow-soft mb-4 text-accent-primary">
             {feature.icon}
           </div>
-          <h3 className="font-semibold text-text-primary mb-1 text-lg">{feature.title}</h3>
-          <p className="text-sm text-text-secondary">{feature.description}</p>
+          <h3 className="font-semibold text-text-primary dark:text-text-primary mb-1 text-lg">{feature.title}</h3>
+          <p className="text-sm text-text-secondary dark:text-text-secondary">{feature.description}</p>
         </div>
       ))}
     </div>
@@ -151,16 +151,16 @@ export default async function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background dark:bg-background flex flex-col">
       <Header />
       
       {/* Main Content */}
       <div className="relative flex-1">
         {/* Subtle background patterns */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute h-[500px] w-[500px] rounded-full bg-accent-tertiary/10 blur-[120px] -top-20 -right-20"></div>
-          <div className="absolute h-[400px] w-[400px] rounded-full bg-accent-primary/5 blur-[100px] bottom-20 -left-20"></div>
-          <div className="absolute h-[300px] w-[300px] rounded-full bg-accent-secondary/10 blur-[80px] bottom-40 right-60"></div>
+          <div className="absolute h-[500px] w-[500px] rounded-full bg-accent-tertiary/10 dark:bg-accent-tertiary/5 blur-[120px] -top-20 -right-20"></div>
+          <div className="absolute h-[400px] w-[400px] rounded-full bg-accent-primary/5 dark:bg-accent-primary/5 blur-[100px] bottom-20 -left-20"></div>
+          <div className="absolute h-[300px] w-[300px] rounded-full bg-accent-secondary/10 dark:bg-accent-secondary/5 blur-[80px] bottom-40 right-60"></div>
         </div>
         
         <div className="relative px-4 sm:px-6 lg:px-8 xl:px-0 py-8 lg:py-12 max-w-6xl mx-auto">
@@ -170,14 +170,14 @@ export default async function Home() {
           {/* Top Rated Section */}
           <div className="mb-10 lg:mb-14">
             <div className="flex items-center gap-3 mb-6">
-              <div className="flex items-center justify-center w-10 h-10 bg-white rounded-full shadow-soft text-accent-primary">
+              <div className="flex items-center justify-center w-10 h-10 bg-white dark:bg-background-secondary rounded-full shadow-soft text-accent-primary">
                 <Star className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="text-lg lg:text-xl font-bold text-text-primary leading-tight">
+                <h2 className="text-lg lg:text-xl font-bold text-text-primary dark:text-text-primary leading-tight">
                   Top Rated Sandwiches
                 </h2>
-                <p className="text-sm text-text-secondary">The ones worth fighting for</p>
+                <p className="text-sm text-text-secondary dark:text-text-secondary">The ones worth fighting for</p>
               </div>
             </div>
             <div className="glass rounded-xl p-4 lg:p-6 mb-2">
@@ -188,14 +188,14 @@ export default async function Home() {
           {/* Trending Section */}
           <div className="mb-10 lg:mb-14">
             <div className="flex items-center gap-3 mb-6">
-              <div className="flex items-center justify-center w-10 h-10 bg-white rounded-full shadow-soft text-accent-primary">
+              <div className="flex items-center justify-center w-10 h-10 bg-white dark:bg-background-secondary rounded-full shadow-soft text-accent-primary">
                 <TrendingUp className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="text-lg lg:text-xl font-bold text-text-primary leading-tight">
+                <h2 className="text-lg lg:text-xl font-bold text-text-primary dark:text-text-primary leading-tight">
                   Just Added
                 </h2>
-                <p className="text-sm text-text-secondary">Fresh finds from fellow sandwich lovers</p>
+                <p className="text-sm text-text-secondary dark:text-text-secondary">Fresh finds from fellow sandwich lovers</p>
               </div>
             </div>
             <div className="glass rounded-xl p-4 lg:p-6 mb-2">
@@ -206,44 +206,18 @@ export default async function Home() {
           {/* Search Section */}
           <div className="mb-10 lg:mb-14">
             <div className="flex items-center gap-3 mb-6">
-              <div className="flex items-center justify-center w-10 h-10 bg-white rounded-full shadow-soft text-accent-primary">
+              <div className="flex items-center justify-center w-10 h-10 bg-white dark:bg-background-secondary rounded-full shadow-soft text-accent-primary">
                 <Search className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="text-lg lg:text-xl font-bold text-text-primary leading-tight">
+                <h2 className="text-lg lg:text-xl font-bold text-text-primary dark:text-text-primary leading-tight">
                   Find Sandwiches
                 </h2>
-                <p className="text-sm text-text-secondary">Filter by what you're craving</p>
+                <p className="text-sm text-text-secondary dark:text-text-secondary">Filter by what you're craving</p>
               </div>
             </div>
             <div className="glass rounded-xl p-4 lg:p-6 mb-2">
               <SearchAndFilterSection sandwiches={allSandwiches} />
-            </div>
-          </div>
-
-          {/* Call to Action */}
-          <div className="text-center mb-10">
-            <div className="glass p-8 lg:p-10 rounded-2xl shadow-soft-lg relative overflow-hidden">
-              {/* Subtle background gradient */}
-              <div className="absolute inset-0 bg-gradient-subtle-accent pointer-events-none"></div>
-              
-              <div className="relative z-10">
-                <div className="size-16 bg-white rounded-full shadow-soft flex items-center justify-center text-3xl mx-auto mb-5">
-                  🥪
-                </div>
-                <h3 className="text-xl lg:text-2xl font-bold text-text-primary mb-3">
-                  Had an epic sandwich?
-                </h3>
-                <p className="text-text-secondary text-lg mb-6 max-w-lg mx-auto">
-                  Don't keep that deliciousness to yourself! Share it, rate it, make others jealous.
-                </p>
-                <Link 
-                  href="/sandwich/new" 
-                  className="gradient-blue text-white text-base font-medium px-8 py-3 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-300 inline-flex hover:translate-y-[-2px]"
-                >
-                  <span>Post Your Sandwich</span>
-                </Link>
-              </div>
             </div>
           </div>
         </div>

@@ -1,3 +1,9 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { useTheme } from "./providers"
+import { Sun, Moon } from "lucide-react"
+
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "outline" | "ghost"
   size?: "sm" | "md" | "lg"
@@ -98,5 +104,24 @@ export function Textarea({ label, error, className = "", ...props }: TextareaPro
         <p className="text-sm text-red-600">{error}</p>
       )}
     </div>
+  )
+}
+
+// Theme Toggle Component
+export function ThemeToggle() {
+  const { theme, setTheme } = useTheme()
+  
+  return (
+    <button
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+      className="flex items-center justify-center w-10 h-10 bg-white dark:bg-background-secondary rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-200 text-text-primary dark:text-text-primary"
+      aria-label="Toggle theme"
+    >
+      {theme === "dark" ? (
+        <Sun size={18} className="text-accent-primary" />
+      ) : (
+        <Moon size={18} className="text-accent-primary" />
+      )}
+    </button>
   )
 }
