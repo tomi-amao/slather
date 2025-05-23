@@ -1,5 +1,3 @@
-import Link from "next/link";
-import Image from "next/image";
 import { Header } from "@/components/header";
 import { Search } from "lucide-react";
 

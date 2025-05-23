@@ -53,11 +53,13 @@ export async function POST(request: NextRequest) {
         { message: "User created successfully", user },
         { status: 201 }
       )
-    } catch (dbError: any) {
+    } catch (dbError: Error | unknown) {
       // Handle database-specific errors
-      if (dbError.code === 'P1001' || 
-          dbError.message?.includes("Can't reach database server") ||
-          dbError.message?.includes("Connection refused")) {
+      if (
+        dbError instanceof Error && 
+        (dbError.message?.includes("Can't reach database server") ||
+        dbError.message?.includes("Connection refused"))
+      ) {
         console.error("Database connection error:", dbError);
         return NextResponse.json(
           { error: "Database connection error. Please try again later or contact support." },
@@ -66,7 +68,8 @@ export async function POST(request: NextRequest) {
       }
       
       // Handle duplicate key errors (another way a user might exist)
-      if (dbError.code === 'P2002') {
+      // PrismaClientKnownRequestError has a code property
+      if (dbError && typeof dbError === 'object' && 'code' in dbError && dbError.code === 'P2002') {
         return NextResponse.json(
           { error: "A user with this email already exists" },
           { status: 409 }

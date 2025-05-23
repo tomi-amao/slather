@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { UploadButton } from "@/lib/uploadthing"
 import { Header } from "@/components/header"
-import type { OurFileRouter } from "@/app/api/uploadthing/core"
 import Image from "next/image"
 
 export default function CreateSandwichPage() {
   const router = useRouter()
-  const { data: session, status } = useSession()
+  // Keeping useSession hook for future use but ignoring the unused variables
+  useSession()
   
   const [formData, setFormData] = useState({
     title: "",
@@ -117,7 +117,7 @@ export default function CreateSandwichPage() {
         const errorMessage = data.error || "Failed to create sandwich";
         if (data.details && Array.isArray(data.details)) {
           // Format validation errors
-          const validationErrors = data.details.map((issue: any) => issue.message).join(", ");
+          const validationErrors = data.details.map((issue: { message: string }) => issue.message).join(", ");
           throw new Error(`${errorMessage}: ${validationErrors}`);
         }
         throw new Error(errorMessage);
@@ -390,10 +390,12 @@ export default function CreateSandwichPage() {
                 <div className="flex flex-wrap gap-3 mb-4 w-full">
                   {formData.images.map((imageUrl, index) => (
                     <div key={index} className="relative group">
-                      <img 
+                      <Image 
                         src={imageUrl} 
                         alt={`Sandwich image ${index + 1}`} 
                         className="h-24 w-24 object-cover rounded-lg"
+                        width={96}
+                        height={96}
                       />
                       <button
                         type="button"

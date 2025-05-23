@@ -129,7 +129,7 @@ export default function SignInPage() {
                 href="/auth/signup" 
                 className="text-sm text-[#191310] hover:underline"
               >
-                Don't have an account? Sign up
+                Don&apos;t have an account? Sign up
               </Link>
               <button
                 type="submit"
