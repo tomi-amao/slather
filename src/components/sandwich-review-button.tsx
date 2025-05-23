@@ -60,7 +60,7 @@ const SandwichReviewButton = () => {
         </div>
         
         <span className="relative font-semibold drop-shadow-md">
-          Write a Sandwich Review
+          Post a Sandwich
         </span>
         
         <PlusCircle 
