@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
-import { Bell, User, LogOut, Menu, X, Home, Compass, Plus, Search, ArrowRight } from "lucide-react"
+import { User, LogOut, Menu, X, Home, Compass, Plus, Search, ArrowRight } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
 import { ThemeToggle } from "./ui"
 import { useRouter, usePathname } from "next/navigation"

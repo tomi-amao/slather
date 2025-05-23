@@ -1,13 +1,16 @@
 import { Header } from "@/components/header";
 import { prisma } from "@/lib/prisma";
 import { SearchAndFilterSection } from "@/components/search-and-filter";
-import { SandwichType } from "@prisma/client";
+import { Prisma, SandwichType } from "@prisma/client";
 
 // Define type for the search params
 type SearchParams = {
   q?: string;
   type?: string;
 };
+
+// Create a type for the where clause
+type SandwichWhereInput = Prisma.SandwichWhereInput;
 
 // SERVER COMPONENT: Fetch sandwich data with search parameters
 async function getFilteredSandwiches(searchParams: SearchParams) {
@@ -16,7 +19,7 @@ async function getFilteredSandwiches(searchParams: SearchParams) {
     const typeFilter = searchParams.type as SandwichType | undefined;
 
     // Build the database query
-    const whereClause: any = {};
+    const whereClause: SandwichWhereInput = {};
     
     // Add search query filtering (search in title, description, or restaurant name)
     if (query) {
