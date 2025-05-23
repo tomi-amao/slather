@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { SearchAndFilterSection } from "@/components/search-and-filter";
 import { SandwichCarousel } from "@/components/sandwich-carousel";
 import { SandwichGrid } from "@/components/sandwich-grid";
-import Link from "next/link";
+import SandwichReviewButton from "@/components/sandwich-review-button";
 import { Star, TrendingUp, Search, Camera, Filter } from "lucide-react";
 
 // SERVER COMPONENT: Fetch sandwich data (this will only run on the server)
@@ -69,25 +69,15 @@ function HeroSection() {
   return (
     <div className="glass rounded-2xl p-6 lg:p-8 mb-10 relative overflow-hidden">
       {/* Subtle background patterns */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-0 right-0 text-6xl transform rotate-6">🥪</div>
-        <div className="absolute bottom-0 left-0 text-4xl transform -rotate-6">🍞</div>
-      </div>
       
       <div className="relative z-10 flex flex-col items-center text-center">
-        <div className="text-5xl mb-6 animate-float">🥪</div>
-        <h1 className="text-2xl lg:text-3xl font-bold text-text-primary dark:text-text-primary mb-3 tracking-tight">
-          Rate, Share, Discover
-        </h1>
-        <p className="text-text-secondary dark:text-text-secondary text-lg max-w-lg mb-8">
-          Find your next amazing sandwich or share that epic bite you just had
-        </p>
-        <Link 
-          href="/sandwich/new" 
-          className="gradient-blue text-white text-base font-medium px-6 py-3 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-200 hover:translate-y-[-2px]"
-        >
-          <span>Post a Sandwich</span>
-        </Link>
+        
+        {/* Buttons container */}
+        <div className="flex flex-col sm:flex-row gap-4 items-center">
+          <SandwichReviewButton />
+          
+        </div>
+        
       </div>
     </div>
   )
