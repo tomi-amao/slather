@@ -3,12 +3,24 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { createSandwichSchema } from "@/lib/validations"
+import { PrismaClient } from "@prisma/client"
+
+// Extend the Session type to include user ID
+interface ExtendedSession {
+  user: {
+    name?: string | null;
+    email?: string | null;
+    image?: string | null;
+    id?: string;
+  }
+}
 
 export async function POST(request: NextRequest) {
   try {
-    // Check authentication
-    const session = await getServerSession(authOptions)
-
+    // Check authentication but make it optional
+    const session = await getServerSession(authOptions) as ExtendedSession | null
+    // User ID is optional - if logged in, we'll associate the sandwich with the user
+    const userId = session?.user?.id
 
     // Parse and validate request body
     const body = await request.json()
@@ -35,35 +47,56 @@ export async function POST(request: NextRequest) {
     } = result.data
 
     // Begin a transaction to create sandwich and associated data
-    const sandwich = await prisma.$transaction(async (tx) => {
+    const sandwich = await prisma.$transaction(async (tx: PrismaClient) => {
       // Find or create restaurant if applicable
       let restaurantId: string | null = null
       
       if (type === "RESTAURANT" && restaurantName) {
-        const restaurant = await tx.restaurant.upsert({
-          where: { name: restaurantName },
-          update: {},
-          create: {
-            name: restaurantName,
-          },
+        // Use findFirst and create instead of upsert to avoid unique constraint issues
+        let restaurant = await tx.restaurant.findFirst({
+          where: { name: restaurantName }
         })
+        
+        if (!restaurant) {
+          restaurant = await tx.restaurant.create({
+            data: { name: restaurantName }
+          })
+        }
+        
         restaurantId = restaurant.id
+      }
+
+      // Create the sandwich data object with optional user ID
+      const sandwichData: any = {
+        title,
+        description,
+        type,
+        images: images || [],
+        ingredients: type === "HOMEMADE" && ingredients ? ingredients.split(',').map(i => i.trim()) : [],
+        restaurantId,
+      }
+      
+      // Only add userId if the user is authenticated
+      if (userId) {
+        sandwichData.userId = userId
+      } else {
+        // Create an anonymous user if needed
+        const anonUser = await tx.user.create({
+          data: {
+            name: "Anonymous User",
+            email: `anon_${Date.now()}@slather.app`, // Create a unique email
+            password: "", // Empty password - this user won't be able to login
+          }
+        })
+        sandwichData.userId = anonUser.id
       }
 
       // Create the sandwich
       const newSandwich = await tx.sandwich.create({
-        data: {
-          title,
-          description,
-          type,
-          images,
-          ingredients: type === "HOMEMADE" && ingredients ? ingredients.split(',').map(i => i.trim()) : [],
-          userId: session.user.id,
-          restaurantId,
-        },
+        data: sandwichData,
       })
 
-      // Create the rating
+      // Create the rating with the same user ID
       await tx.rating.create({
         data: {
           taste: parseInt(tasteRating),
@@ -71,7 +104,7 @@ export async function POST(request: NextRequest) {
           value: parseInt(textureRating), // Using texture as "value" since our schema has value
           overall: parseFloat(overallRating),
           sandwichId: newSandwich.id,
-          userId: session.user.id,
+          userId: sandwichData.userId,
         },
       })
 
@@ -88,7 +121,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Error creating sandwich:", error)
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Internal server error", details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     )
   }
