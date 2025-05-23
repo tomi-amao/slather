@@ -29,6 +29,19 @@ async function SandwichDetail({ id }: { id: string }) {
       ratings: {
         orderBy: { createdAt: 'desc' },
         take: 1,
+        select: {
+          id: true,
+          overall: true,
+          taste: true,
+          texture: true,
+          value: true,
+          presentation: true,
+          review: true,
+          sandwichId: true,
+          userId: true,
+          createdAt: true,
+          updatedAt: true,
+        },
       },
       user: {
         select: {
@@ -56,15 +69,16 @@ async function SandwichDetail({ id }: { id: string }) {
   })
   
   // Format ingredients as array if it's a string
-  const ingredientsArray: string[] = typeof sandwich.ingredients === 'string' 
-    ? sandwich.ingredients.split(',').map((i: string) => i.trim()).filter(Boolean)
-    : (sandwich.ingredients as string[] || [])
+  const ingredientsRaw = sandwich.ingredients as string | string[];
+  const ingredientsArray: string[] = typeof ingredientsRaw === 'string'
+    ? ingredientsRaw.split(',').map((i: string) => i.trim()).filter(Boolean)
+    : (Array.isArray(ingredientsRaw) ? ingredientsRaw : []);
   
   // Serialize the data to remove Prisma-specific properties
   const serializedSandwich = {
     id: sandwich.id,
     title: sandwich.title,
-    description: sandwich.description,
+    description: sandwich.description ?? "",
     type: sandwich.type,
     price: sandwich.price,
     images: Array.isArray(sandwich.images) ? sandwich.images : [],
@@ -94,7 +108,7 @@ async function SandwichDetail({ id }: { id: string }) {
     id: rating.id,
     overall: rating.overall,
     taste: rating.taste,
-    texture: rating.texture,
+    texture: rating.texture !== null && rating.texture !== undefined ? Number(rating.texture) : null,
     value: rating.value,
     presentation: rating.presentation,
     review: rating.review,
@@ -116,12 +130,15 @@ async function SandwichDetail({ id }: { id: string }) {
 }
 
 // Page component
-export default function SandwichPage({ params }: { params: { id: string } }) {
+export default async function SandwichPage({ params }: { params: Promise<{ id: string }> }) {
+  // Await the params promise
+  const resolvedParams = await params;
+  
   return (
     <div className="layout-container flex h-full grow flex-col">
       <Header />
       <Suspense fallback={<SandwichLoading />}>
-        <SandwichDetail id={params.id} />
+        <SandwichDetail id={resolvedParams.id} />
       </Suspense>
     </div>
   )

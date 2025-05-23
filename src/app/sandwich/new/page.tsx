@@ -692,7 +692,12 @@ export default function CreateSandwichPage() {
 }
 
 // Enhanced dropzone component
-function UploadZone({ onFilesAccepted, maxFiles = 5 }) {
+type UploadZoneProps = {
+  onFilesAccepted: (files: File[]) => void;
+  maxFiles?: number;
+};
+
+function UploadZone({ onFilesAccepted, maxFiles = 5 }: UploadZoneProps) {
   const [isDragging, setIsDragging] = useState(false)
   
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -705,48 +710,49 @@ function UploadZone({ onFilesAccepted, maxFiles = 5 }) {
   })
   
   return (
-    <motion.div
-      {...getRootProps()}
-      className={`w-full p-6 border-2 ${isDragging || isDragActive ? 'border-[#eccebf] bg-[#faf7f5]' : 'border-dashed border-[#e3d9d3]'} rounded-xl transition-colors flex flex-col items-center justify-center cursor-pointer`}
-      whileHover={{ scale: 1.02, borderColor: '#eccebf' }}
-      whileTap={{ scale: 0.98 }}
-    >
-      <input {...getInputProps()} />
-      <div className="flex flex-col items-center gap-4">
-        <motion.div 
-          className="w-12 h-12 rounded-full bg-[#f1ece9] flex items-center justify-center"
-          animate={{ 
-            y: isDragging ? [-5, 0, -5] : 0 
-          }}
-          transition={{ 
-            repeat: isDragging ? Infinity : 0, 
-            duration: 1.5 
-          }}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#8c6a5a]">
-            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"></path>
-            <line x1="16" y1="5" x2="22" y2="5"></line>
-            <line x1="19" y1="2" x2="19" y2="8"></line>
-            <circle cx="9" cy="9" r="2"></circle>
-            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
-          </svg>
-        </motion.div>
-        <div className="text-center">
-          <motion.p 
-            className="text-[#191310] text-sm font-medium"
+    <div {...getRootProps()}>
+      <motion.div
+        className={`w-full p-6 border-2 ${isDragging || isDragActive ? 'border-[#eccebf] bg-[#faf7f5]' : 'border-dashed border-[#e3d9d3]'} rounded-xl transition-colors flex flex-col items-center justify-center cursor-pointer`}
+        whileHover={{ scale: 1.02, borderColor: '#eccebf' }}
+        whileTap={{ scale: 0.98 }}
+      >
+        <input {...getInputProps()} />
+        <div className="flex flex-col items-center gap-4">
+          <motion.div 
+            className="w-12 h-12 rounded-full bg-[#f1ece9] flex items-center justify-center"
             animate={{ 
-              scale: isDragging ? [1, 1.05, 1] : 1 
+              y: isDragging ? [-5, 0, -5] : 0 
             }}
             transition={{ 
               repeat: isDragging ? Infinity : 0, 
               duration: 1.5 
             }}
           >
-            {isDragging ? "Drop your images here!" : "Drag and drop or click to upload"}
-          </motion.p>
-          <p className="text-[#8c6a5a] text-xs mt-1">Supports JPEG, PNG, WebP (Max 4MB)</p>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#8c6a5a]">
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"></path>
+              <line x1="16" y1="5" x2="22" y2="5"></line>
+              <line x1="19" y1="2" x2="19" y2="8"></line>
+              <circle cx="9" cy="9" r="2"></circle>
+              <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
+            </svg>
+          </motion.div>
+          <div className="text-center">
+            <motion.p 
+              className="text-[#191310] text-sm font-medium"
+              animate={{ 
+                scale: isDragging ? [1, 1.05, 1] : 1 
+              }}
+              transition={{ 
+                repeat: isDragging ? Infinity : 0, 
+                duration: 1.5 
+              }}
+            >
+              {isDragging ? "Drop your images here!" : "Drag and drop or click to upload"}
+            </motion.p>
+            <p className="text-[#8c6a5a] text-xs mt-1">Supports JPEG, PNG, WebP (Max 4MB)</p>
+          </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </div>
   )
 }

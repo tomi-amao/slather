@@ -1,7 +1,7 @@
 import { Header } from "@/components/header";
 import { prisma } from "@/lib/prisma";
 import { SearchAndFilterSection } from "@/components/search-and-filter";
-import { Prisma, SandwichType } from "@prisma/client";
+import { SandwichType } from "@prisma/client";
 
 // Define type for the search params
 type SearchParams = {
@@ -9,17 +9,17 @@ type SearchParams = {
   type?: string;
 };
 
-// Create a type for the where clause
-type SandwichWhereInput = Prisma.SandwichWhereInput;
-
 // SERVER COMPONENT: Fetch sandwich data with search parameters
 async function getFilteredSandwiches(searchParams: SearchParams) {
   try {
     const query = searchParams.q || '';
-    const typeFilter = searchParams.type as SandwichType | undefined;
+    const typeFilter = searchParams.type as string | undefined;
 
     // Build the database query
-    const whereClause: SandwichWhereInput = {};
+    const whereClause: {
+      OR?: Array<{ title?: { contains: string; mode: 'insensitive' } } | { description?: { contains: string; mode: 'insensitive' } }>;
+      type?: SandwichType;
+    } = {};
     
     // Add search query filtering (search in title, description, or restaurant name)
     if (query) {
@@ -31,7 +31,7 @@ async function getFilteredSandwiches(searchParams: SearchParams) {
     
     // Add type filtering
     if (typeFilter && ['RESTAURANT', 'HOMEMADE'].includes(typeFilter)) {
-      whereClause.type = typeFilter;
+      whereClause.type = typeFilter as SandwichType;
     }
 
     // Fetch sandwiches with filters applied
@@ -70,13 +70,22 @@ async function getFilteredSandwiches(searchParams: SearchParams) {
 export default async function DiscoverPage({
   searchParams,
 }: {
-  searchParams: SearchParams;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
+  // Await the searchParams promise
+  const resolvedSearchParams = await searchParams;
+  
+  // Convert searchParams to our custom SearchParams type
+  const typedSearchParams: SearchParams = {
+    q: resolvedSearchParams.q as string | undefined,
+    type: resolvedSearchParams.type as string | undefined
+  };
+  
   // Get sandwiches based on search parameters
-  const sandwiches = await getFilteredSandwiches(searchParams);
+  const sandwiches = await getFilteredSandwiches(typedSearchParams);
   
   // Determine initial filter from search params
-  const initialFilter = searchParams.type || "ALL";
+  const initialFilter = typedSearchParams.type || "ALL";
   
   return (
     <div className="min-h-screen bg-background dark:bg-background flex flex-col">
@@ -92,14 +101,14 @@ export default async function DiscoverPage({
         <div className="relative px-4 sm:px-6 lg:px-8 py-8 max-w-6xl mx-auto">
           <div className="mb-8">
             <h1 className="text-2xl font-bold text-text-primary dark:text-text-primary mb-2">
-              {searchParams.q 
-                ? `Results for "${searchParams.q}"` 
+              {typedSearchParams.q 
+                ? `Results for "${typedSearchParams.q}"` 
                 : "Discover Sandwiches"}
             </h1>
             <p className="text-text-secondary dark:text-text-secondary">
-              {searchParams.type === "RESTAURANT" 
+              {typedSearchParams.type === "RESTAURANT" 
                 ? "Restaurant sandwiches" 
-                : searchParams.type === "HOMEMADE" 
+                : typedSearchParams.type === "HOMEMADE" 
                   ? "Homemade creations" 
                   : "All sandwiches"}
             </p>

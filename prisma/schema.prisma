@@ -140,6 +140,7 @@ model Rating {
   review       String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  texture      Int?
 
   // Foreign keys
   userId     String

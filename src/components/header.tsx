@@ -219,7 +219,7 @@ export function Header() {
                   onClick={() => setMenuOpen(!menuOpen)}
                   className="relative"
                 >
-                  {session.user.image ? (
+                  {session.user && session.user.image ? (
                     <div
                       className="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10 h-10 cursor-pointer border-2 border-white dark:border-background-secondary shadow-soft hover:shadow-soft-lg transition-all duration-200"
                       style={{ backgroundImage: `url("${session.user.image}")` }}
@@ -236,8 +236,8 @@ export function Header() {
                 {menuOpen && (
                   <div className="absolute right-0 mt-3 w-56 rounded-xl bg-white dark:bg-background-secondary shadow-soft-lg py-2 z-20 border border-border-color dark:border-border-color">
                     <div className="px-4 py-3 border-b border-border-color dark:border-border-color mb-1">
-                      <p className="font-medium text-text-primary dark:text-text-primary">{session.user.name}</p>
-                      <p className="text-sm text-text-secondary dark:text-text-secondary truncate">{session.user.email}</p>
+                      <p className="font-medium text-text-primary dark:text-text-primary">{session.user?.name}</p>
+                      <p className="text-sm text-text-secondary dark:text-text-secondary truncate">{session.user?.email}</p>
                     </div>
                     <Link 
                       href="/profile" 

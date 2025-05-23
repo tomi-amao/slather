@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { createSandwichSchema } from "@/lib/validations"
-import { PrismaClient, SandwichType } from "@prisma/client"
+import { SandwichType } from "@prisma/client"
 
 // Extend the Session type to include user ID
 interface ExtendedSession {
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     } = result.data
 
     // Begin a transaction to create sandwich and associated data
-    const sandwich = await prisma.$transaction(async (tx: PrismaClient) => {
+    const sandwich = await prisma.$transaction(async (tx) => {
       // Find or create restaurant if applicable
       let restaurantId: string | null = null
       

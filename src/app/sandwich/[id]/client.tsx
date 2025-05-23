@@ -406,14 +406,19 @@ export default function SandwichDetailClient({
                   <div className="grid grid-cols-2 gap-2 mb-4">
                     <RatingDisplay name="Overall" value={rating.overall} />
                     <RatingDisplay name="Taste" value={rating.taste} />
-                    <RatingDisplay name="Texture" value={rating.texture || rating.value} />
+                    <RatingDisplay name="Texture" value={typeof rating.texture === 'number' ? rating.texture : (typeof rating.value === 'number' ? rating.value : 0)} />
                     <RatingDisplay name="Presentation" value={rating.presentation} />
                   </div>
                   
                   {/* Average rating */}
                   <div className="flex items-center justify-center mt-3 p-3 bg-white rounded-lg">
                     <div className="text-3xl font-bold text-[#191310] mr-2">
-                      {((rating.overall + rating.taste + (rating.texture || rating.value) + rating.presentation) / 4).toFixed(1)}
+                      {(
+                        (rating.overall + rating.taste +
+                          (typeof rating.texture === 'number' ? rating.texture : (typeof rating.value === 'number' ? rating.value : 0)) +
+                          rating.presentation
+                        ) / 4
+                      ).toFixed(1)}
                     </div>
                     <div className="text-sm text-[#8c6a5a]">
                       out of 5
