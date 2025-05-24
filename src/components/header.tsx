@@ -177,7 +177,6 @@ export function Header() {
                 <Compass size={18} />
                 <span>Explore</span>
               </Link>
-              {isAuthenticated && (
                 <Link 
                   className="flex items-center gap-2 bg-white dark:bg-background-secondary text-text-primary dark:text-text-primary shadow-soft hover:shadow-soft-lg text-sm font-medium px-4 py-2 rounded-full transition-all duration-200" 
                   href="/sandwich/new"
@@ -185,7 +184,6 @@ export function Header() {
                   <Plus size={18} />
                   <span>Create</span>
                 </Link>
-              )}
             </nav>
           </div>
 
@@ -255,7 +253,7 @@ export function Header() {
             ) : (
               <Link 
                 href="/auth/signin"
-                className="gradient-blue text-white text-sm font-medium px-4 lg:px-5 py-2 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-200"
+                className="text-black text-sm font-medium px-4 lg:px-5 py-2 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-200"
               >
                 <span className="truncate">Sign in</span>
               </Link>
@@ -430,7 +428,7 @@ export function Header() {
                 <>
                   <Link 
                     href="/sandwich/new"
-                    className="flex items-center gap-4 p-3 rounded-xl gradient-blue text-white transition-all duration-200 shadow-soft mt-3"
+                    className="flex items-center gap-4 p-3 rounded-xl  text-white transition-all duration-200 shadow-soft mt-3"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     <div className="flex items-center justify-center w-10 h-10 bg-white/20 rounded-full">
@@ -493,7 +491,7 @@ export function Header() {
               {!isAuthenticated && (
                 <Link 
                   href="/auth/signin"
-                  className="flex items-center gap-4 p-3 rounded-xl gradient-blue text-white transition-all duration-200 shadow-soft mt-3"
+                  className="flex items-center gap-4 p-3 rounded-xl text-white transition-all duration-200 shadow-soft mt-3"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <div className="flex items-center justify-center w-10 h-10 bg-white/20 rounded-full">

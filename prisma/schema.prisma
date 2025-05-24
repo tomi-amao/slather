@@ -133,14 +133,14 @@ model Sandwich {
 
 model Rating {
   id           String @id @default(cuid())
-  taste        Int    @default(0) // 1-5 scale
-  presentation Int    @default(0) // 1-5 scale
-  value        Int    @default(0) // 1-5 scale
+  taste        Float  @default(0) // 1-10 scale with decimals
+  presentation Float  @default(0) // 1-10 scale with decimals
+  value        Float  @default(0) // 1-10 scale with decimals
   overall      Float  @default(0) // Calculated average
   review       String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  texture      Int?
+  texture      Float? // 1-10 scale with decimals
 
   // Foreign keys
   userId     String

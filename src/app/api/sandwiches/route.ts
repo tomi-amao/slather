@@ -3,7 +3,13 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { createSandwichSchema } from "@/lib/validations"
-import { SandwichType } from "@prisma/client"
+import { Prisma } from "@prisma/client"
+
+// Define the SandwichType enum locally since it's not exported from Prisma
+enum SandwichType {
+  RESTAURANT = "RESTAURANT",
+  HOMEMADE = "HOMEMADE"
+}
 
 // Extend the Session type to include user ID
 interface ExtendedSession {
@@ -58,7 +64,7 @@ export async function POST(request: NextRequest) {
     } = result.data
 
     // Begin a transaction to create sandwich and associated data
-    const sandwich = await prisma.$transaction(async (tx) => {
+    const sandwich = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // Find or create restaurant if applicable
       let restaurantId: string | null = null
       
@@ -77,30 +83,63 @@ export async function POST(request: NextRequest) {
         restaurantId = restaurant.id
       }
 
-      // Create the sandwich data object with optional user ID
+      // Determine the user ID to use
+      let finalUserId: string
+      
+      if (userId) {
+        // User is authenticated, verify the user exists
+        const existingUser = await tx.user.findUnique({
+          where: { id: userId }
+        })
+        
+        if (!existingUser) {
+          throw new Error("Authenticated user not found in database")
+        }
+        
+        finalUserId = userId
+      } else {
+        // Create or find an anonymous user with a unique identifier
+        const randomSuffix = Math.random().toString(36).substring(2, 15)
+        const timestamp = Date.now()
+        const uniqueEmail = `anon_${timestamp}_${randomSuffix}@slather.app`
+        
+        try {
+          const anonUser = await tx.user.create({
+            data: {
+              name: "Anonymous User",
+              email: uniqueEmail,
+              password: null, // Null password - this user won't be able to login
+            }
+          })
+          finalUserId = anonUser.id
+        } catch (error) {
+          // If there's still a conflict (very unlikely), try to find an existing anonymous user
+          const fallbackUser = await tx.user.findFirst({
+            where: {
+              name: "Anonymous User",
+              email: {
+                startsWith: "anon_"
+              }
+            }
+          })
+          
+          if (fallbackUser) {
+            finalUserId = fallbackUser.id
+          } else {
+            throw new Error("Failed to create or find anonymous user")
+          }
+        }
+      }
+
+      // Create the sandwich data object
       const sandwichData: SandwichCreateInput = {
         title,
         description,
-        type,
+        type: type as SandwichType,
         images: images || [],
         ingredients: type === "HOMEMADE" && ingredients ? ingredients.split(',').map(i => i.trim()) : [],
         restaurantId,
-        userId: '', // This will be set below either from session or from a newly created anonymous user
-      }
-      
-      // Only add userId if the user is authenticated
-      if (userId) {
-        sandwichData.userId = userId
-      } else {
-        // Create an anonymous user if needed
-        const anonUser = await tx.user.create({
-          data: {
-            name: "Anonymous User",
-            email: `anon_${Date.now()}@slather.app`, // Create a unique email
-            password: "", // Empty password - this user won't be able to login
-          }
-        })
-        sandwichData.userId = anonUser.id
+        userId: finalUserId,
       }
 
       // Create the sandwich
@@ -111,12 +150,12 @@ export async function POST(request: NextRequest) {
       // Create the rating with the same user ID
       await tx.rating.create({
         data: {
-          taste: parseInt(tasteRating),
-          presentation: parseInt(presentationRating),
-          value: parseInt(textureRating), // Using texture as "value" since our schema has value
-          overall: parseFloat(overallRating),
+          taste: Math.round(parseFloat(tasteRating) * 10) / 10, // Store as decimal
+          presentation: Math.round(parseFloat(presentationRating) * 10) / 10,
+          value: Math.round(parseFloat(textureRating) * 10) / 10, // Using texture as "value" since our schema has value
+          overall: Math.round(parseFloat(overallRating) * 10) / 10,
           sandwichId: newSandwich.id,
-          userId: sandwichData.userId,
+          userId: finalUserId,
         },
       })
 

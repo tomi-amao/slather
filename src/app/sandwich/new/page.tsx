@@ -3,11 +3,10 @@
 import { useState} from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
-import { UploadButton } from "@/lib/uploadthing"
+import { UploadDropzone } from "@/lib/uploadthing"
 import { Header } from "@/components/header"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
-import { useDropzone } from "react-dropzone"
 import toast from "react-hot-toast"
 
 // Custom components for our enhanced form
@@ -32,15 +31,17 @@ export default function CreateSandwichPage() {
     type: "RESTAURANT" as "RESTAURANT" | "HOMEMADE",
     restaurantName: "",
     ingredients: [] as string[],
-    overallRating: "3",
-    tasteRating: "3",
-    textureRating: "3",
-    presentationRating: "3",
+    overallRating: "5.0",
+    tasteRating: "5.0",
+    textureRating: "5.0",
+    presentationRating: "5.0",
     images: [] as string[],
   })
   
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState("")
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [isUploading, setIsUploading] = useState(false)
   
   // Define form steps for our multi-step form
   const formSteps = [
@@ -262,7 +263,7 @@ export default function CreateSandwichPage() {
             <ProgressBar 
               steps={formSteps} 
               currentStep={currentStep} 
-              onStepClick={(step) => {
+              onStepClick={(step: number) => {
                 // Only allow going back or to validated steps
                 if (step <= currentStep) {
                   setCurrentStep(step)
@@ -428,7 +429,7 @@ export default function CreateSandwichPage() {
                       <RatingSlider
                         name="overallRating"
                         value={formData.overallRating}
-                        onChange={(value) => handleRatingChange("overallRating", value)}
+                        onChange={(value: string) => handleRatingChange("overallRating", value)}
                         label="Overall Rating"
                         className="mb-8"
                       />
@@ -436,7 +437,7 @@ export default function CreateSandwichPage() {
                       <RatingSlider
                         name="tasteRating"
                         value={formData.tasteRating}
-                        onChange={(value) => handleRatingChange("tasteRating", value)}
+                        onChange={(value: string) => handleRatingChange("tasteRating", value)}
                         label="Taste"
                         className="mb-8"
                       />
@@ -444,7 +445,7 @@ export default function CreateSandwichPage() {
                       <RatingSlider
                         name="textureRating"
                         value={formData.textureRating}
-                        onChange={(value) => handleRatingChange("textureRating", value)}
+                        onChange={(value: string) => handleRatingChange("textureRating", value)}
                         label="Texture"
                         className="mb-8"
                       />
@@ -452,7 +453,7 @@ export default function CreateSandwichPage() {
                       <RatingSlider
                         name="presentationRating"
                         value={formData.presentationRating}
-                        onChange={(value) => handleRatingChange("presentationRating", value)}
+                        onChange={(value: string) => handleRatingChange("presentationRating", value)}
                         label="Presentation"
                       />
                     </div>
@@ -516,31 +517,89 @@ export default function CreateSandwichPage() {
                             </p>
                           </div>
                           
-                          {/* Enhanced dropzone with animations */}
-                          <div className="mb-6">
-                            <UploadZone 
-                              onFilesAccepted={() => {}} // Handled by UploadThing
-                              maxFiles={5 - formData.images.length}
-                            />
-                          </div>
-                          
-                          {/* UploadThing button */}
+                          {/* UploadDropzone with progress */}
                           <div className="flex justify-center">
-                            <UploadButton
+                            <UploadDropzone
                               endpoint="sandwichImageUploader"
                               onClientUploadComplete={(res) => {
                                 // Extract URLs from the response and add to form data
                                 const newImages = res.map(file => file.url);
                                 handleImagesUploaded(newImages);
+                                setIsUploading(false);
+                                setUploadProgress(0);
+                              }}
+                              onUploadBegin={(name) => {
+                                setIsUploading(true);
+                                setUploadProgress(0);
+                              }}
+                              onUploadProgress={(progress: number) => {
+                                setUploadProgress(progress);
                               }}
                               onUploadError={(error: Error) => {
                                 console.error("Upload error:", error);
                                 setError(`Error uploading image: ${error.message}`);
                                 toast.error(`Upload error: ${error.message}`);
+                                setIsUploading(false);
+                                setUploadProgress(0);
                               }}
-                              className="uploadthing-button ut-button:bg-[#eccebf] ut-button:text-[#191310] ut-button:rounded-full ut-button:font-bold ut-button:text-sm ut-button:px-6 ut-button:py-2 ut-button:cursor-pointer ut-button:transition-colors ut-button:hover:bg-[#e3c0a9] ut-allowed-content:flex ut-allowed-content:flex-col ut-allowed-content:items-center ut-allowed-content:gap-1"
+                              config={{
+                                mode: "auto"
+                              }}
+                              appearance={{
+                                button: {
+                                  background: "#eccebf",
+                                  color: "#191310",
+                                  borderRadius: "9999px",
+                                  fontWeight: "bold",
+                                  fontSize: "14px",
+                                  padding: "8px 24px",
+                                  cursor: "pointer",
+                                  transition: "background-color 0.2s",
+                                },
+                                allowedContent: {
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  alignItems: "center",
+                                  gap: "4px",
+                                },
+                                container: {
+                                  border: "2px dashed #e3d9d3",
+                                  borderRadius: "12px",
+                                  padding: "24px",
+                                  backgroundColor: isUploading ? "#faf7f5" : "transparent",
+                                  transition: "all 0.2s"
+                                }
+                              }}
                             />
                           </div>
+
+                          {/* Upload Progress */}
+                          {isUploading && uploadProgress > 0 && (
+                            <motion.div 
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              className="mt-4 space-y-2"
+                            >
+                              <div className="bg-white rounded-lg p-3 shadow-sm">
+                                <div className="flex justify-between items-center mb-2">
+                                  <span className="text-sm font-medium text-[#191310] truncate">
+                                    Uploading image...
+                                  </span>
+                                  <span className="text-xs text-[#8c6a5a">
+                                    {Math.round(uploadProgress)}%
+                                  </span>
+                                </div>
+                                <div className="w-full bg-[#f1ece9] rounded-full h-2">
+                                  <motion.div 
+                                    className="bg-[#eccebf] h-2 rounded-full"
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${uploadProgress}%` }}
+                                    transition={{ duration: 0.3 }}
+                                  />
+                                </div>
+                              </div>
+                            </motion.div>
+                          )}
                         </motion.div>
                       )}
                     </div>
@@ -611,19 +670,19 @@ export default function CreateSandwichPage() {
                             <div className="grid grid-cols-2 gap-2 mt-1">
                               <div>
                                 <span className="text-xs text-[#8c6a5a]">Overall:</span> 
-                                <span className="ml-1 font-medium">{formData.overallRating} / 5</span>
+                                <span className="ml-1 font-medium">{parseFloat(formData.overallRating).toFixed(1)} / 10</span>
                               </div>
                               <div>
                                 <span className="text-xs text-[#8c6a5a]">Taste:</span> 
-                                <span className="ml-1 font-medium">{formData.tasteRating} / 5</span>
+                                <span className="ml-1 font-medium">{parseFloat(formData.tasteRating).toFixed(1)} / 10</span>
                               </div>
                               <div>
                                 <span className="text-xs text-[#8c6a5a]">Texture:</span> 
-                                <span className="ml-1 font-medium">{formData.textureRating} / 5</span>
+                                <span className="ml-1 font-medium">{parseFloat(formData.textureRating).toFixed(1)} / 10</span>
                               </div>
                               <div>
                                 <span className="text-xs text-[#8c6a5a]">Presentation:</span> 
-                                <span className="ml-1 font-medium">{formData.presentationRating} / 5</span>
+                                <span className="ml-1 font-medium">{parseFloat(formData.presentationRating).toFixed(1)} / 10</span>
                               </div>
                             </div>
                           </div>
@@ -685,72 +744,6 @@ export default function CreateSandwichPage() {
               )}
             </div>
           </form>
-        </div>
-      </motion.div>
-    </div>
-  )
-}
-
-// Enhanced dropzone component
-type UploadZoneProps = {
-  onFilesAccepted: (files: File[]) => void;
-  maxFiles?: number;
-};
-
-function UploadZone({ onFilesAccepted, maxFiles = 5 }: UploadZoneProps) {
-  const [isDragging, setIsDragging] = useState(false)
-  
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: { 'image/*': [] },
-    maxFiles,
-    onDragEnter: () => setIsDragging(true),
-    onDragLeave: () => setIsDragging(false),
-    onDrop: () => setIsDragging(false),
-    onDropAccepted: onFilesAccepted
-  })
-  
-  return (
-    <div {...getRootProps()}>
-      <motion.div
-        className={`w-full p-6 border-2 ${isDragging || isDragActive ? 'border-[#eccebf] bg-[#faf7f5]' : 'border-dashed border-[#e3d9d3]'} rounded-xl transition-colors flex flex-col items-center justify-center cursor-pointer`}
-        whileHover={{ scale: 1.02, borderColor: '#eccebf' }}
-        whileTap={{ scale: 0.98 }}
-      >
-        <input {...getInputProps()} />
-        <div className="flex flex-col items-center gap-4">
-          <motion.div 
-            className="w-12 h-12 rounded-full bg-[#f1ece9] flex items-center justify-center"
-            animate={{ 
-              y: isDragging ? [-5, 0, -5] : 0 
-            }}
-            transition={{ 
-              repeat: isDragging ? Infinity : 0, 
-              duration: 1.5 
-            }}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#8c6a5a]">
-              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7"></path>
-              <line x1="16" y1="5" x2="22" y2="5"></line>
-              <line x1="19" y1="2" x2="19" y2="8"></line>
-              <circle cx="9" cy="9" r="2"></circle>
-              <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path>
-            </svg>
-          </motion.div>
-          <div className="text-center">
-            <motion.p 
-              className="text-[#191310] text-sm font-medium"
-              animate={{ 
-                scale: isDragging ? [1, 1.05, 1] : 1 
-              }}
-              transition={{ 
-                repeat: isDragging ? Infinity : 0, 
-                duration: 1.5 
-              }}
-            >
-              {isDragging ? "Drop your images here!" : "Drag and drop or click to upload"}
-            </motion.p>
-            <p className="text-[#8c6a5a] text-xs mt-1">Supports JPEG, PNG, WebP (Max 4MB)</p>
-          </div>
         </div>
       </motion.div>
     </div>

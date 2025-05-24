@@ -34,10 +34,22 @@ export const createSandwichSchema = z.object({
   type: z.enum(["RESTAURANT", "HOMEMADE"]),
   restaurantName: z.string().optional(),
   ingredients: z.string().optional(),
-  overallRating: z.enum(["1", "2", "3", "4", "5"]),
-  tasteRating: z.enum(["1", "2", "3", "4", "5"]),
-  textureRating: z.enum(["1", "2", "3", "4", "5"]),
-  presentationRating: z.enum(["1", "2", "3", "4", "5"]),
+  overallRating: z.string().refine((val) => {
+    const num = parseFloat(val);
+    return !isNaN(num) && num >= 1 && num <= 10;
+  }, "Overall rating must be between 1 and 10"),
+  tasteRating: z.string().refine((val) => {
+    const num = parseFloat(val);
+    return !isNaN(num) && num >= 1 && num <= 10;
+  }, "Taste rating must be between 1 and 10"),
+  textureRating: z.string().refine((val) => {
+    const num = parseFloat(val);
+    return !isNaN(num) && num >= 1 && num <= 10;
+  }, "Texture rating must be between 1 and 10"),
+  presentationRating: z.string().refine((val) => {
+    const num = parseFloat(val);
+    return !isNaN(num) && num >= 1 && num <= 10;
+  }, "Presentation rating must be between 1 and 10"),
   images: z.array(z.string()).min(1, "At least one image is required").max(5, "Maximum 5 images allowed"),
 })
 

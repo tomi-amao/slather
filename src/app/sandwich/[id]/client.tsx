@@ -543,15 +543,12 @@ export default function SandwichDetailClient({
           transition={{ delay: 0.6 }}
           className="mt-12 bg-[#eccebf] rounded-xl p-8 text-center"
         >
-          <h2 className="text-2xl font-bold text-[#191310] mb-3">Got your own sandwich to share?</h2>
-          <p className="text-[#191310] mb-6 max-w-xl mx-auto">
-            Share your culinary creations and contribute to our ever-growing collection of amazing sandwiches.
-          </p>
-          <Link
+          <h2 className="text-2xl font-bold text-[#191310] mb-3">Drop a sammie</h2>
+              <Link
             href="/sandwich/new"
             className="inline-block bg-[#191310] text-white font-medium rounded-full px-6 py-3 hover:bg-opacity-90 transition-colors"
           >
-            Create Your Sandwich
+            Post a new sandwich
           </Link>
         </motion.div>
       </motion.div>
