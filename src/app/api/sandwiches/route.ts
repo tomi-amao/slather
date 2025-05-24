@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
             }
           })
           finalUserId = anonUser.id
-        } catch (error) {
+        } catch {
           // If there's still a conflict (very unlikely), try to find an existing anonymous user
           const fallbackUser = await tx.user.findFirst({
             where: {

@@ -528,7 +528,7 @@ export default function CreateSandwichPage() {
                                 setIsUploading(false);
                                 setUploadProgress(0);
                               }}
-                              onUploadBegin={(name) => {
+                              onUploadBegin={() => {
                                 setIsUploading(true);
                                 setUploadProgress(0);
                               }}
@@ -585,7 +585,7 @@ export default function CreateSandwichPage() {
                                   <span className="text-sm font-medium text-[#191310] truncate">
                                     Uploading image...
                                   </span>
-                                  <span className="text-xs text-[#8c6a5a">
+                                  <span className="text-xs text-[#8c6a5a]">
                                     {Math.round(uploadProgress)}%
                                   </span>
                                 </div>

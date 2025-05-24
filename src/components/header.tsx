@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { useSession, signOut } from "next-auth/react"
 import { User, LogOut, Menu, X, Home, Compass, Plus, Search, ArrowRight } from "lucide-react"
 import { useState, useEffect, useRef } from "react"
@@ -78,9 +79,11 @@ export function Header() {
         <div className="flex items-center justify-between px-4 sm:px-6 lg:px-10 py-3 lg:py-4">
           {/* Logo Section */}
           <Link href="/" className="flex items-center group">
-            <img
+            <Image
               src="/slather-logo.png"
               alt="Slather Logo"
+              width={80}
+              height={80}
               className="w-16 h-16 lg:w-20 lg:h-20 object-contain transition-transform group-hover:scale-105"
             />
           </Link>

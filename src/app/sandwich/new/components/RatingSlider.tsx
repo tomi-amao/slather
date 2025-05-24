@@ -78,8 +78,12 @@ export function RatingSlider({ value, onChange, label, className = "" }: RatingS
   
   React.useEffect(() => {
     const handleGlobalMouseMove = (e: MouseEvent) => {
-      if (isDragging) {
-        handleSliderInteraction(e.clientX);
+      if (isDragging && sliderRef.current) {
+        const rect = sliderRef.current.getBoundingClientRect();
+        const percentage = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+        const newValue = 1 + (percentage * 9); // Scale from 1 to 10
+        const roundedValue = Math.round(newValue * 10) / 10; // Round to 1 decimal place
+        onChange(roundedValue.toString());
       }
     };
     
@@ -96,7 +100,7 @@ export function RatingSlider({ value, onChange, label, className = "" }: RatingS
       document.removeEventListener('mousemove', handleGlobalMouseMove);
       document.removeEventListener('mouseup', handleGlobalMouseUp);
     };
-  }, [isDragging]);
+  }, [isDragging, onChange]);
   
   const progressPercentage = ((numericValue - 1) / 9) * 100;
   
