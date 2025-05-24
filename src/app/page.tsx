@@ -3,8 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { SearchAndFilterSection } from "@/components/search-and-filter";
 import { SandwichCarousel } from "@/components/sandwich-carousel";
 import { SandwichGrid } from "@/components/sandwich-grid";
-import SandwichReviewButton from "@/components/sandwich-review-button";
-import { Star, TrendingUp, Search, Camera, Filter } from "lucide-react";
+import { Star, TrendingUp, Search } from "lucide-react";
 
 // SERVER COMPONENT: Fetch sandwich data (this will only run on the server)
 async function getSandwiches() {
@@ -65,66 +64,8 @@ async function getSandwiches() {
 }
 
 // Modern Hero component
-function HeroSection() {
-  return (
-    <div className="glass rounded-2xl p-6 lg:p-8 mb-10 relative overflow-hidden">
-      {/* Subtle background patterns */}
-      
-      <div className="relative z-10 flex flex-col items-center text-center">
-        
-        {/* Buttons container */}
-        <div className="flex flex-col sm:flex-row gap-4 items-center">
-          <SandwichReviewButton />
-          
-        </div>
-        
-      </div>
-    </div>
-  )
-}
 
 // Feature cards component
-function FeatureCards() {
-  const features = [
-    {
-      icon: <Search className="h-6 w-6" />,
-      title: "Find",
-      description: "Spot tasty sandwiches near you",
-    },
-    {
-      icon: <Star className="h-6 w-6" />,
-      title: "Rate",
-      description: "Tell us what's worth the bite",
-    },
-    {
-      icon: <Camera className="h-6 w-6" />,
-      title: "Snap",
-      description: "Share your sandwich photos",
-    },
-    {
-      icon: <Filter className="h-6 w-6" />,
-      title: "Filter",
-      description: "Browse by style or ingredient",
-    }
-  ]
-
-  return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-12">
-      {features.map((feature, index) => (
-        <div 
-          key={index}
-          className="glass p-5 rounded-xl text-center hover:shadow-soft-lg transition-all duration-300 hover:translate-y-[-2px]"
-        >
-          <div className="mx-auto size-12 bg-white dark:bg-background-secondary rounded-full flex items-center justify-center shadow-soft mb-4 text-accent-primary">
-            {feature.icon}
-          </div>
-          <h3 className="font-semibold text-text-primary dark:text-text-primary mb-1 text-lg">{feature.title}</h3>
-          <p className="text-sm text-text-secondary dark:text-text-secondary">{feature.description}</p>
-        </div>
-      ))}
-    </div>
-  )
-}
 
 // SERVER COMPONENT: The main page component
 export default async function Home() {
@@ -154,8 +95,6 @@ export default async function Home() {
         </div>
         
         <div className="relative px-4 sm:px-6 lg:px-8 xl:px-0 py-8 lg:py-12 max-w-6xl mx-auto">
-          <HeroSection />
-          <FeatureCards />
           
           {/* Top Rated Section */}
           <div className="mb-10 lg:mb-14">
@@ -164,7 +103,7 @@ export default async function Home() {
                 <Star className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="text-lg lg:text-xl font-bold text-text-primary dark:text-text-primary leading-tight">
+                <h2 className="amatic-sc-regular text-lg lg:text-xl font-bold text-text-primary dark:text-text-primary leading-tight">
                   Top Rated Sandwiches
                 </h2>
                 <p className="text-sm text-text-secondary dark:text-text-secondary">The ones worth fighting for</p>
@@ -182,8 +121,8 @@ export default async function Home() {
                 <TrendingUp className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="text-lg lg:text-xl font-bold text-text-primary dark:text-text-primary leading-tight">
-                  Just Added
+                <h2 className="amatic-sc-regular text-lg lg:text-xl font-bold text-text-primary dark:text-text-primary leading-tight">
+                  Just Slathered
                 </h2>
                 <p className="text-sm text-text-secondary dark:text-text-secondary">Fresh finds from fellow sandwich lovers</p>
               </div>
@@ -200,10 +139,10 @@ export default async function Home() {
                 <Search className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="text-lg lg:text-xl font-bold text-text-primary dark:text-text-primary leading-tight">
+                <h2 className="amatic-sc-regular text-lg lg:text-xl font-bold text-text-primary dark:text-text-primary leading-tight">
                   Find Sandwiches
                 </h2>
-                <p className="text-sm text-text-secondary dark:text-text-secondary">Filter by what you're craving</p>
+                <p className="text-sm text-text-secondary dark:text-text-secondary">Filter the slather</p>
               </div>
             </div>
             <div className="glass rounded-xl p-4 lg:p-6 mb-2">

@@ -77,29 +77,12 @@ export function Header() {
       }`}>
         <div className="flex items-center justify-between px-4 sm:px-6 lg:px-10 py-3 lg:py-4">
           {/* Logo Section */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative">
-              <div className="size-8 lg:size-10 transform transition-transform group-hover:translate-y-[-2px]">
-                <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                  <path 
-                    d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z" 
-                    fill="currentColor" 
-                    className="text-accent-primary group-hover:text-accent-secondary"
-                  />
-                </svg>
-              </div>
-              <div className="absolute -top-1 -right-1 size-4 bg-white dark:bg-background-secondary rounded-full shadow-sm flex items-center justify-center">
-                <span className="text-[10px]">🥪</span>
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <h1 className="text-text-primary dark:text-text-primary text-xl lg:text-2xl font-bold leading-tight tracking-[-0.02em] group-hover:text-accent-primary transition-colors">
-                Slather
-              </h1>
-              <span className="text-text-secondary dark:text-text-secondary text-xs font-medium hidden sm:block">
-                Sandwich Explorer
-              </span>
-            </div>
+          <Link href="/" className="flex items-center group">
+            <img
+              src="/slather-logo.png"
+              alt="Slather Logo"
+              className="w-16 h-16 lg:w-20 lg:h-20 object-contain transition-transform group-hover:scale-105"
+            />
           </Link>
 
           {/* Desktop Navigation */}

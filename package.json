@@ -12,6 +12,7 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
+    "db:migrate-and-generate": "prisma migrate dev && prisma generate",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
