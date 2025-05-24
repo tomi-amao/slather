@@ -13,7 +13,8 @@
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
     "db:migrate-and-generate": "prisma migrate dev && prisma generate",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.9.1",
