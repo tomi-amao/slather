@@ -34,6 +34,11 @@ export const createSandwichSchema = z.object({
   type: z.enum(["RESTAURANT", "HOMEMADE"]),
   restaurantName: z.string().optional(),
   ingredients: z.string().optional(),
+  price: z.string().optional().refine((val) => {
+    if (!val || val === "") return true; // Allow empty string (optional field)
+    const num = parseFloat(val);
+    return !isNaN(num) && num >= 0;
+  }, "Price must be a valid positive number"),
   overallRating: z.string().refine((val) => {
     const num = parseFloat(val);
     return !isNaN(num) && num >= 1 && num <= 10;

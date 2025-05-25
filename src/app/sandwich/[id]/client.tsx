@@ -184,26 +184,56 @@ function ImageGallery({ images, title }: { images: string[], title: string }) {
   )
 }
 
-// Component to display ratings with animation
+// Component to display ratings with animation - Updated for 10-point scale
 function RatingDisplay({ name, value }: { name: string; value: number }) {
+  // Convert 10-point scale to percentage for visual display
+  const percentage = (value / 10) * 100;
+  
   return (
-    <div className="flex flex-col items-center p-2">
-      <div className="flex items-center gap-1">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <motion.svg 
-            key={i} 
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: i * 0.1 }}
-            className={`w-5 h-5 ${i < value ? 'text-[#eccebf]' : 'text-gray-300'}`}
-            fill="currentColor" 
-            viewBox="0 0 20 20"
-          >
-            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </motion.svg>
-        ))}
+    <div className="flex flex-col items-center p-3">
+      <div className="flex flex-col items-center">
+        {/* Circular progress indicator */}
+        <div className="relative w-12 h-12 mb-2">
+          <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
+            {/* Background circle */}
+            <path
+              className="text-gray-200"
+              stroke="currentColor"
+              strokeWidth="3"
+              fill="none"
+              d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+            />
+            {/* Progress circle */}
+            <motion.path
+              className="text-[#eccebf]"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+              fill="none"
+              initial={{ strokeDasharray: "0 100" }}
+              animate={{ strokeDasharray: `${percentage} 100` }}
+              transition={{ duration: 1, delay: 0.2 }}
+              d="M18 2.0845
+                a 15.9155 15.9155 0 0 1 0 31.831
+                a 15.9155 15.9155 0 0 1 0 -31.831"
+            />
+          </svg>
+          {/* Rating number in center */}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <motion.span 
+              className="text-sm font-bold text-[#191310]"
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5, duration: 0.3 }}
+            >
+              {value.toFixed(1)}
+            </motion.span>
+          </div>
+        </div>
       </div>
-      <span className="mt-1 text-sm text-[#8c6a5a]">{name}</span>
+      <span className="text-xs text-[#8c6a5a] text-center font-medium">{name}</span>
     </div>
   )
 }
@@ -410,7 +440,7 @@ export default function SandwichDetailClient({
                     <RatingDisplay name="Presentation" value={rating.presentation} />
                   </div>
                   
-                  {/* Average rating */}
+                  {/* Average rating - Updated for 10-point scale */}
                   <div className="flex items-center justify-center mt-3 p-3 bg-white rounded-lg">
                     <div className="text-3xl font-bold text-[#191310] mr-2">
                       {(
@@ -421,7 +451,7 @@ export default function SandwichDetailClient({
                       ).toFixed(1)}
                     </div>
                     <div className="text-sm text-[#8c6a5a]">
-                      out of 5
+                      out of 10
                     </div>
                   </div>
                   

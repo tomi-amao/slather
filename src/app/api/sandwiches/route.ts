@@ -28,6 +28,7 @@ type SandwichCreateInput = {
   type: SandwichType;
   images: string[];
   ingredients: string[];
+  price?: number | null;
   restaurantId?: string | null;
   userId: string;
 };
@@ -56,6 +57,7 @@ export async function POST(request: NextRequest) {
       type, 
       restaurantName, 
       ingredients, 
+      price,
       overallRating,
       tasteRating,
       textureRating,
@@ -138,6 +140,7 @@ export async function POST(request: NextRequest) {
         type: type as SandwichType,
         images: images || [],
         ingredients: type === "HOMEMADE" && ingredients ? ingredients.split(',').map(i => i.trim()) : [],
+        price: price && price !== "" ? parseFloat(price) : null,
         restaurantId,
         userId: finalUserId,
       }

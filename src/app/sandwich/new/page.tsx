@@ -1,6 +1,6 @@
 "use client"
 
-import { useState} from "react"
+import { useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { UploadDropzone } from "@/lib/uploadthing"
@@ -31,6 +31,7 @@ export default function CreateSandwichPage() {
     type: "RESTAURANT" as "RESTAURANT" | "HOMEMADE",
     restaurantName: "",
     ingredients: [] as string[],
+    price: "", // Add price field
     overallRating: "5.0",
     tasteRating: "5.0",
     textureRating: "5.0",
@@ -69,9 +70,16 @@ export default function CreateSandwichPage() {
   }
   
   // Handle ingredients change (for tags)
-  const handleIngredientsChange = (ingredients: string[]) => {
-    setFormData(prev => ({ ...prev, ingredients }))
-  }
+  const handleIngredientsChange = useCallback(
+    (updater: (prevIngredients: string[]) => string[]) => {
+      setFormData(prevFormData => {
+        const currentIngredients = Array.isArray(prevFormData.ingredients) ? prevFormData.ingredients : [];
+        const newIngredients = updater(currentIngredients);
+        return { ...prevFormData, ingredients: newIngredients };
+      });
+    },
+    [] // setFormData is stable, so empty deps array is fine.
+  );
   
   // Navigate to next step if validation passes
   const handleNextStep = () => {
@@ -393,14 +401,42 @@ export default function CreateSandwichPage() {
                       </motion.div>
                     )}
                     
+                    {/* Price input - appears for both restaurant and homemade */}
+                    <motion.div 
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3 overflow-hidden"
+                    >
+                      <label className="flex flex-col min-w-40 flex-1">
+                        <p className="text-[#191310] text-base font-medium leading-normal pb-2">
+                          Price {formData.type === "HOMEMADE" ? "(estimated cost)" : ""} (optional)
+                        </p>
+                        <div className="relative">
+                          <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#8c6a5a] text-base">£</span>
+                          <input
+                            name="price"
+                            type="number"
+                            step="0.01"
+                            min="0"
+                            value={formData.price}
+                            onChange={handleInputChange}
+                            placeholder="0.00"
+                            className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#191310] focus:outline-0 focus:ring-0 border-none bg-[#f1ece9] focus:border-none h-14 placeholder:text-[#8c6a5a] pl-8 pr-4 py-4 text-base font-normal leading-normal"
+                          />
+                        </div>
+                      </label>
+                    </motion.div>
+                    
                     {formData.type === "HOMEMADE" && (
                       <motion.div 
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3 overflow-hidden"
+                        className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3 overflow-visible"
+                        style={{ overflow: 'visible' }}
                       >
-                        <label className="flex flex-col min-w-40 flex-1">
+                        <label className="flex flex-col min-w-40 flex-1 overflow-visible">
                           <p className="text-[#191310] text-base font-medium leading-normal pb-2">
                             What ingredients did you use?
                           </p>
@@ -585,7 +621,7 @@ export default function CreateSandwichPage() {
                                   <span className="text-sm font-medium text-[#191310] truncate">
                                     Uploading image...
                                   </span>
-                                  <span className="text-xs text-[#8c6a5a]">
+                                  <span className="text-xs text-[#8c6a5a">
                                     {Math.round(uploadProgress)}%
                                   </span>
                                 </div>
@@ -662,6 +698,13 @@ export default function CreateSandwichPage() {
                                   </span>
                                 ))}
                               </div>
+                            </div>
+                          )}
+                          
+                          {formData.price && (
+                            <div>
+                              <h4 className="text-sm font-medium text-[#8c6a5a]">Price</h4>
+                              <p className="text-base">${parseFloat(formData.price).toFixed(2)}</p>
                             </div>
                           )}
                           

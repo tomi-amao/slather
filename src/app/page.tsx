@@ -103,7 +103,7 @@ export default async function Home() {
                 <Star className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="amatic-sc-regular text-lg lg:text-xl font-bold text-text-primary dark:text-text-primary leading-tight">
+                <h2 className=" text-lg lg:text-xl font-bold text-text-primary dark:text-text-primary leading-tight">
                   Top Rated Sandwiches
                 </h2>
                 <p className="text-sm text-text-secondary dark:text-text-secondary">The ones worth fighting for</p>
@@ -121,7 +121,7 @@ export default async function Home() {
                 <TrendingUp className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="amatic-sc-regular text-lg lg:text-xl font-bold text-text-primary dark:text-text-primary leading-tight">
+                <h2 className=" text-lg lg:text-xl font-bold text-text-primary dark:text-text-primary leading-tight">
                   Just Slathered
                 </h2>
                 <p className="text-sm text-text-secondary dark:text-text-secondary">Fresh finds from fellow sandwich lovers</p>
@@ -139,7 +139,7 @@ export default async function Home() {
                 <Search className="h-5 w-5" />
               </div>
               <div>
-                <h2 className="amatic-sc-regular text-lg lg:text-xl font-bold text-text-primary dark:text-text-primary leading-tight">
+                <h2 className=" text-lg lg:text-xl font-bold text-text-primary dark:text-text-primary leading-tight">
                   Find Sandwiches
                 </h2>
                 <p className="text-sm text-text-secondary dark:text-text-secondary">Filter the slather</p>
