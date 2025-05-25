@@ -3,13 +3,36 @@ import { prisma } from "@/lib/prisma";
 import { SearchAndFilterSection } from "@/components/search-and-filter";
 import { SandwichCarousel } from "@/components/sandwich-carousel";
 import { SandwichGrid } from "@/components/sandwich-grid";
-import { Star, TrendingUp, Search } from "lucide-react";
+import { Star, TrendingUp, Search, Plus, ArrowRight } from "lucide-react";
+import Link from "next/link";
+
+type SandwichWithRatings = {
+  id: string;
+  title: string;
+  description: string | null;
+  images: string[];
+  type: 'RESTAURANT' | 'HOMEMADE';
+  price: number | null;
+  createdAt: Date;
+  ingredients: string[];
+  userId: string;
+  restaurantId: string | null;
+  restaurant: {
+    name: string;
+  } | null;
+  ratings: {
+    overall: number;
+  }[];
+  user: {
+    name: string | null;
+  } | null;
+};
 
 // SERVER COMPONENT: Fetch sandwich data (this will only run on the server)
 async function getSandwiches() {
   try {
     // First fetch all sandwiches with their ratings
-    const allSandwiches = await prisma.sandwich.findMany({
+    const allSandwiches: SandwichWithRatings[] = await prisma.sandwich.findMany({
       include: {
         restaurant: {
           select: {
@@ -30,9 +53,9 @@ async function getSandwiches() {
     });
 
     // Calculate average ratings and sort manually
-    const sandwichesWithAvgRating = allSandwiches.map(sandwich => {
+    const sandwichesWithAvgRating = allSandwiches.map((sandwich: SandwichWithRatings) => {
       const avgRating = sandwich.ratings.length > 0
-        ? sandwich.ratings.reduce((sum, rating) => sum + rating.overall, 0) / sandwich.ratings.length
+        ? sandwich.ratings.reduce((sum: number, rating: { overall: number }) => sum + rating.overall, 0) / sandwich.ratings.length
         : 0;
       return {
         ...sandwich,
@@ -96,6 +119,22 @@ export default async function Home() {
         
         <div className="relative px-4 sm:px-6 lg:px-8 xl:px-0 py-8 lg:py-12 max-w-6xl mx-auto">
           
+          {/* Hero Section with Centered Button */}
+          <div className="mb-12 lg:mb-16">
+            <div className="glass rounded-2xl p-6 lg:p-8">
+              <div className="flex justify-center">
+                <Link 
+                  href="/sandwich/new"
+                  className="group inline-flex items-center justify-center gap-3 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:scale-105"
+                >
+                  <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
+                  <span className="font-semibold text-lg">Create Sandwich Post</span>
+                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
+                </Link>
+              </div>
+            </div>
+          </div>
+
           {/* Top Rated Section */}
           <div className="mb-10 lg:mb-14">
             <div className="flex items-center gap-3 mb-6">

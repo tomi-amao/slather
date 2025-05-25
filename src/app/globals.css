@@ -137,6 +137,23 @@ a {
   50% { box-shadow: 0 0 25px rgba(66, 153, 225, 0.4); }
 }
 
+/* Animation delay classes for the landing page */
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animation-delay-600 {
+  animation-delay: 600ms;
+}
+
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
