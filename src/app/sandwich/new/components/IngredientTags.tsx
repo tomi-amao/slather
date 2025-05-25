@@ -63,9 +63,12 @@ export function IngredientTags({ ingredients, onChange }: IngredientTagsProps) {
     } else if (e.key === 'Backspace' && !inputValue) {
       // Remove the last ingredient when backspace is pressed in an empty input
       if (safeIngredients.length) {
-        const newIngredients = [...safeIngredients];
-        newIngredients.pop();
-        onChange(newIngredients);
+        onChange((prevIngredients: string[]) => {
+          const safePrevIngredients = Array.isArray(prevIngredients) ? prevIngredients : [];
+          const newIngredients = [...safePrevIngredients];
+          newIngredients.pop();
+          return newIngredients;
+        });
       }
     } else if (e.key === 'Escape') {
       setShowSuggestions(false);
@@ -113,7 +116,7 @@ export function IngredientTags({ ingredients, onChange }: IngredientTagsProps) {
   };
 
   // Handle input blur with proper timing to allow suggestion clicks
-  const handleBlur = (e: React.FocusEvent) => {
+  const handleBlur = () => {
     // Check if the blur is happening because user clicked on suggestions
     setTimeout(() => {
       // Only hide if focus didn't move to suggestions container

@@ -18,7 +18,10 @@
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.9.1",
+    "@fontsource/amatic-sc": "^5.2.5",
+    "@fontsource/caveat-brush": "^5.2.5",
     "@fontsource/noto-sans": "^5.2.7",
+    "@fontsource/patrick-hand-sc": "^5.2.5",
     "@fontsource/plus-jakarta-sans": "^5.2.5",
     "@headlessui/react": "^2.2.4",
     "@heroicons/react": "^2.2.0",

@@ -4,6 +4,8 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
+import { LikeButton } from "@/components/like-button"
+import { Comments } from "@/components/comments"
 
 // Type definitions
 type SerializedRestaurant = {
@@ -336,12 +338,29 @@ export default function SandwichDetailClient({
         {/* Title and metadata */}
         <div className="mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-[#191310]">{sandwich.title}</h1>
+            <div className="flex items-center gap-4 mb-2">
+              <h1 className="text-3xl md:text-4xl font-bold text-[#191310]">{sandwich.title}</h1>
+              {/* Price display next to title */}
+              {sandwich.price && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-lg font-bold"
+                >
+                  ${sandwich.price.toFixed(2)}
+                </motion.div>
+              )}
+            </div>
             <div className="flex items-center mt-2 text-sm text-[#8c6a5a]">
               <span className="inline-block bg-[#eccebf] text-[#191310] text-xs font-medium px-3 py-1 rounded-full mr-3">
                 {sandwich.type}
               </span>
               <span>{formattedDate}</span>
+              {/* Like button */}
+              <div className="ml-4">
+                <LikeButton sandwichId={sandwich.id} />
+              </div>
             </div>
           </div>
           
@@ -565,6 +584,16 @@ export default function SandwichDetailClient({
             </motion.div>
           </div>
         </div>
+        
+        {/* Comments Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+          className="mt-8"
+        >
+          <Comments sandwichId={sandwich.id} />
+        </motion.div>
         
         {/* CTA to create your own */}
         <motion.div

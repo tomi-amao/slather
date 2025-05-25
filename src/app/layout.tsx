@@ -28,10 +28,6 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Caveat+Brush&family=Patrick+Hand+SC&display=swap"
-          rel="stylesheet"
-        />
       </head>
       <body
         className="relative flex size-full min-h-screen flex-col bg-background dark:bg-background overflow-x-hidden"

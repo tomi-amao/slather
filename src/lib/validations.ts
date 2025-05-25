@@ -82,6 +82,7 @@ export const ratingSchema = z.object({
 // Comment schema
 export const commentSchema = z.object({
   content: z.string().min(1, "Comment cannot be empty").max(500, "Comment must be less than 500 characters"),
+  sandwichId: z.string().min(1, "Sandwich ID is required"),
   parentId: z.string().optional(),
 })
 
