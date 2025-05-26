@@ -105,21 +105,21 @@ export function RatingSlider({ value, onChange, label, className = "" }: RatingS
   const progressPercentage = ((numericValue - 1) / 9) * 100;
   
   return (
-    <div className={`w-full max-w-lg ${className}`}>
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-[#191310] font-medium">{label}</span>
-        <div className="flex items-center gap-2">
-          <span className="text-xl">{emojis[emojiIndex]}</span>
-          <span className="text-lg font-bold text-[#191310] min-w-[40px] text-right">
+    <div className={`w-full ${className}`}>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-3">
+        <span className="text-[#191310] font-medium text-sm sm:text-base">{label}</span>
+        <div className="flex items-center gap-2 justify-center sm:justify-end">
+          <span className="text-xl sm:text-2xl">{emojis[emojiIndex]}</span>
+          <span className="text-lg sm:text-xl font-bold text-[#191310] min-w-[40px] text-center sm:text-right">
             {numericValue.toFixed(1)}
           </span>
         </div>
       </div>
       
-      <div className="relative mb-3">
+      <div className="relative mb-3 px-2 sm:px-0">
         <div 
           ref={sliderRef}
-          className="h-3 bg-[#f1ece9] rounded-full w-full cursor-pointer relative"
+          className="h-3 sm:h-4 bg-[#f1ece9] rounded-full w-full cursor-pointer relative"
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
@@ -136,7 +136,7 @@ export function RatingSlider({ value, onChange, label, className = "" }: RatingS
           
           {/* Slider thumb */}
           <motion.div
-            className="absolute top-1/2 w-5 h-5 bg-[#191310] rounded-full transform -translate-y-1/2 cursor-grab active:cursor-grabbing shadow-md"
+            className="absolute top-1/2 w-5 h-5 sm:w-6 sm:h-6 bg-[#191310] rounded-full transform -translate-y-1/2 cursor-grab active:cursor-grabbing shadow-md touch-manipulation"
             style={{ left: `${progressPercentage}%`, marginLeft: '-10px' }}
             animate={{ left: `${progressPercentage}%` }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -151,7 +151,7 @@ export function RatingSlider({ value, onChange, label, className = "" }: RatingS
             <button
               key={num}
               type="button"
-              className="text-xs text-[#8c6a5a] hover:text-[#191310] transition-colors cursor-pointer"
+              className="text-xs sm:text-sm text-[#8c6a5a] hover:text-[#191310] transition-colors cursor-pointer touch-manipulation p-1"
               onClick={() => onChange(num.toString())}
             >
               {num}
@@ -164,7 +164,7 @@ export function RatingSlider({ value, onChange, label, className = "" }: RatingS
         key={emojiIndex}
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-[#8c6a5a] text-sm mt-2 min-h-[20px]"
+        className="text-[#8c6a5a] text-xs sm:text-sm mt-2 min-h-[20px] text-center sm:text-left"
       >
         {descriptions[emojiIndex]}
       </motion.p>

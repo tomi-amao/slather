@@ -252,22 +252,22 @@ export default function CreateSandwichPage() {
   }
   
   return (
-    <div className="layout-container flex h-full grow flex-col">
+    <div className="layout-container flex h-full grow flex-col overflow-x-hidden">
       <Header />
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="px-4 md:px-12 lg:px-40 flex flex-1 justify-center py-5"
+        className="px-3 sm:px-4 md:px-12 lg:px-40 flex flex-1 justify-center py-3 sm:py-5 w-full"
       >
-        <div className="layout-content-container flex flex-col max-w-[960px] flex-1 relative">
-          <div className="flex flex-wrap justify-between gap-3 p-4 mb-6">
-            <h1 className="text-[#191310] tracking-light text-[32px] font-bold leading-tight min-w-72">
+        <div className="layout-content-container flex flex-col max-w-[960px] flex-1 relative w-full">
+          <div className="flex flex-wrap justify-between gap-3 p-2 sm:p-4 mb-4 sm:mb-6">
+            <h1 className="text-[#191310] tracking-light text-xl sm:text-2xl lg:text-[32px] font-bold leading-tight w-full sm:min-w-0">
               Share Your Sandwich Experience
             </h1>
           </div>
           
           {/* Progress bar */}
-          <div className="mb-8 px-4">
+          <div className="mb-6 sm:mb-8 px-2 sm:px-4">
             <ProgressBar 
               steps={formSteps} 
               currentStep={currentStep} 
@@ -284,13 +284,13 @@ export default function CreateSandwichPage() {
             <motion.div 
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex max-w-[480px] mx-4 mb-4 p-4 bg-red-50 text-red-700 rounded-xl"
+              className="flex w-full max-w-full mx-2 sm:mx-4 mb-4 p-3 sm:p-4 bg-red-50 text-red-700 rounded-xl"
             >
               {error}
             </motion.div>
           )}
           
-          <form onSubmit={handleSubmit} className="flex-1 flex flex-col">
+          <form onSubmit={handleSubmit} className="flex-1 flex flex-col w-full">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentStep}
@@ -299,18 +299,18 @@ export default function CreateSandwichPage() {
                 exit="exit"
                 variants={pageVariants}
                 transition={{ type: "tween", duration: 0.3 }}
-                className="flex-1"
+                className="flex-1 w-full"
               >
                 {/* Step 1: Basic Info */}
                 {currentStep === 0 && (
                   <FormStep title={formSteps[0].title} description={formSteps[0].description}>
-                    <div className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-                      <label className="flex flex-col min-w-40 flex-1">
+                    <div className="flex w-full max-w-full sm:max-w-[480px] flex-wrap items-end gap-4 px-2 sm:px-4 py-3">
+                      <label className="flex flex-col min-w-0 flex-1 w-full">
                         <motion.p 
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.1 }}
-                          className="text-[#191310] text-base font-medium leading-normal pb-2"
+                          className="text-[#191310] text-sm sm:text-base font-medium leading-normal pb-2"
                         >
                           What's your sandwich called?
                         </motion.p>
@@ -324,20 +324,20 @@ export default function CreateSandwichPage() {
                             value={formData.title}
                             onChange={handleInputChange}
                             placeholder="e.g., The Classic Reuben"
-                            className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#191310] focus:outline-0 focus:ring-0 border-none bg-[#f1ece9] focus:border-none h-14 placeholder:text-[#8c6a5a] p-4 text-base font-normal leading-normal"
+                            className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#191310] focus:outline-0 focus:ring-0 border-none bg-[#f1ece9] focus:border-none h-12 sm:h-14 placeholder:text-[#8c6a5a] p-3 sm:p-4 text-sm sm:text-base font-normal leading-normal"
                             required
                           />
                         </motion.div>
                       </label>
                     </div>
                     
-                    <div className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3">
-                      <label className="flex flex-col min-w-40 flex-1">
+                    <div className="flex w-full max-w-full sm:max-w-[480px] flex-wrap items-end gap-4 px-2 sm:px-4 py-3">
+                      <label className="flex flex-col min-w-0 flex-1 w-full">
                         <motion.p 
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.3 }}
-                          className="text-[#191310] text-base font-medium leading-normal pb-2"
+                          className="text-[#191310] text-sm sm:text-base font-medium leading-normal pb-2"
                         >
                           Describe your sandwich experience
                         </motion.p>
@@ -351,7 +351,7 @@ export default function CreateSandwichPage() {
                             value={formData.description}
                             onChange={handleInputChange}
                             placeholder="Describe your sandwich experience in detail. Include the taste, texture, and overall satisfaction."
-                            className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#191310] focus:outline-0 focus:ring-0 border-none bg-[#f1ece9] focus:border-none min-h-36 placeholder:text-[#8c6a5a] p-4 text-base font-normal leading-normal"
+                            className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#191310] focus:outline-0 focus:ring-0 border-none bg-[#f1ece9] focus:border-none min-h-32 sm:min-h-36 placeholder:text-[#8c6a5a] p-3 sm:p-4 text-sm sm:text-base font-normal leading-normal"
                             required
                           />
                         </motion.div>
@@ -363,11 +363,11 @@ export default function CreateSandwichPage() {
                 {/* Step 2: Details */}
                 {currentStep === 1 && (
                   <FormStep title={formSteps[1].title} description={formSteps[1].description}>
-                    <div className="px-4 py-3">
+                    <div className="px-2 sm:px-4 py-3 w-full">
                       <motion.p 
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-[#191310] text-base font-medium leading-normal pb-2"
+                        className="text-[#191310] text-sm sm:text-base font-medium leading-normal pb-2"
                       >
                         Where did your sandwich come from?
                       </motion.p>
@@ -383,10 +383,10 @@ export default function CreateSandwichPage() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3 overflow-hidden"
+                        className="flex w-full max-w-full sm:max-w-[480px] flex-wrap items-end gap-4 px-2 sm:px-4 py-3 overflow-hidden"
                       >
-                        <label className="flex flex-col min-w-40 flex-1">
-                          <p className="text-[#191310] text-base font-medium leading-normal pb-2">
+                        <label className="flex flex-col min-w-0 flex-1 w-full">
+                          <p className="text-[#191310] text-sm sm:text-base font-medium leading-normal pb-2">
                             Restaurant Name
                           </p>
                           <CustomDropdown
@@ -406,14 +406,14 @@ export default function CreateSandwichPage() {
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3 overflow-hidden"
+                      className="flex w-full max-w-full sm:max-w-[480px] flex-wrap items-end gap-4 px-2 sm:px-4 py-3 overflow-hidden"
                     >
-                      <label className="flex flex-col min-w-40 flex-1">
-                        <p className="text-[#191310] text-base font-medium leading-normal pb-2">
+                      <label className="flex flex-col min-w-0 flex-1 w-full">
+                        <p className="text-[#191310] text-sm sm:text-base font-medium leading-normal pb-2">
                           Price {formData.type === "HOMEMADE" ? "(estimated cost)" : ""} (optional)
                         </p>
                         <div className="relative">
-                          <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-[#8c6a5a] text-base">£</span>
+                          <span className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-[#8c6a5a] text-sm sm:text-base">£</span>
                           <input
                             name="price"
                             type="number"
@@ -422,7 +422,7 @@ export default function CreateSandwichPage() {
                             value={formData.price}
                             onChange={handleInputChange}
                             placeholder="0.00"
-                            className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#191310] focus:outline-0 focus:ring-0 border-none bg-[#f1ece9] focus:border-none h-14 placeholder:text-[#8c6a5a] pl-8 pr-4 py-4 text-base font-normal leading-normal"
+                            className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-xl text-[#191310] focus:outline-0 focus:ring-0 border-none bg-[#f1ece9] focus:border-none h-12 sm:h-14 placeholder:text-[#8c6a5a] pl-7 sm:pl-8 pr-3 sm:pr-4 py-3 sm:py-4 text-sm sm:text-base font-normal leading-normal"
                           />
                         </div>
                       </label>
@@ -433,11 +433,11 @@ export default function CreateSandwichPage() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="flex max-w-[480px] flex-wrap items-end gap-4 px-4 py-3 overflow-visible"
+                        className="flex w-full max-w-full sm:max-w-[480px] flex-wrap items-end gap-4 px-2 sm:px-4 py-3 overflow-visible"
                         style={{ overflow: 'visible' }}
                       >
-                        <label className="flex flex-col min-w-40 flex-1 overflow-visible">
-                          <p className="text-[#191310] text-base font-medium leading-normal pb-2">
+                        <label className="flex flex-col min-w-0 flex-1 overflow-visible w-full">
+                          <p className="text-[#191310] text-sm sm:text-base font-medium leading-normal pb-2">
                             What ingredients did you use?
                           </p>
                           <IngredientTags
@@ -453,45 +453,44 @@ export default function CreateSandwichPage() {
                 {/* Step 3: Ratings */}
                 {currentStep === 2 && (
                   <FormStep title={formSteps[2].title} description={formSteps[2].description}>
-                    <div className="px-4 py-3">
+                    <div className="px-2 sm:px-4 py-3 max-w-full w-full">
                       <motion.p 
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-[#191310] text-base font-medium leading-normal pb-2"
+                        className="text-[#191310] text-sm sm:text-base font-medium leading-normal pb-4 text-center sm:text-left"
                       >
                         Rate your overall experience
                       </motion.p>
                       
-                      <RatingSlider
-                        name="overallRating"
-                        value={formData.overallRating}
-                        onChange={(value: string) => handleRatingChange("overallRating", value)}
-                        label="Overall Rating"
-                        className="mb-8"
-                      />
-                      
-                      <RatingSlider
-                        name="tasteRating"
-                        value={formData.tasteRating}
-                        onChange={(value: string) => handleRatingChange("tasteRating", value)}
-                        label="Taste"
-                        className="mb-8"
-                      />
-                      
-                      <RatingSlider
-                        name="textureRating"
-                        value={formData.textureRating}
-                        onChange={(value: string) => handleRatingChange("textureRating", value)}
-                        label="Texture"
-                        className="mb-8"
-                      />
-                      
-                      <RatingSlider
-                        name="presentationRating"
-                        value={formData.presentationRating}
-                        onChange={(value: string) => handleRatingChange("presentationRating", value)}
-                        label="Presentation"
-                      />
+                      <div className="space-y-6 sm:space-y-8">
+                        <RatingSlider
+                          name="overallRating"
+                          value={formData.overallRating}
+                          onChange={(value: string) => handleRatingChange("overallRating", value)}
+                          label="Overall Rating"
+                        />
+                        
+                        <RatingSlider
+                          name="tasteRating"
+                          value={formData.tasteRating}
+                          onChange={(value: string) => handleRatingChange("tasteRating", value)}
+                          label="Taste"
+                        />
+                        
+                        <RatingSlider
+                          name="textureRating"
+                          value={formData.textureRating}
+                          onChange={(value: string) => handleRatingChange("textureRating", value)}
+                          label="Texture"
+                        />
+                        
+                        <RatingSlider
+                          name="presentationRating"
+                          value={formData.presentationRating}
+                          onChange={(value: string) => handleRatingChange("presentationRating", value)}
+                          label="Presentation"
+                        />
+                      </div>
                     </div>
                   </FormStep>
                 )}
@@ -499,7 +498,7 @@ export default function CreateSandwichPage() {
                 {/* Step 4: Photos */}
                 {currentStep === 3 && (
                   <FormStep title={formSteps[3].title} description={formSteps[3].description}>
-                    <div className="flex flex-col items-center px-4 py-3">
+                    <div className="flex flex-col items-center px-2 sm:px-4 py-3 w-full">
                       {/* Display already uploaded images */}
                       {formData.images.length > 0 && (
                         <motion.div 
@@ -542,13 +541,13 @@ export default function CreateSandwichPage() {
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.2 }}
-                          className="w-full max-w-[480px]"
+                          className="w-full max-w-full sm:max-w-[480px]"
                         >
                           <div className="flex flex-col items-center gap-2 mx-auto mb-4">
-                            <p className="text-[#191310] text-lg font-bold leading-tight tracking-[-0.015em] text-center">
+                            <p className="text-[#191310] text-base sm:text-lg font-bold leading-tight tracking-[-0.015em] text-center">
                               Share photos of your sandwich
                             </p>
-                            <p className="text-[#8c6a5a] text-sm font-normal leading-normal text-center">
+                            <p className="text-[#8c6a5a] text-xs sm:text-sm font-normal leading-normal text-center">
                               Upload up to 5 photos ({formData.images.length}/5 uploaded)
                             </p>
                           </div>
@@ -645,13 +644,13 @@ export default function CreateSandwichPage() {
                 {/* Step 5: Review */}
                 {currentStep === 4 && (
                   <FormStep title={formSteps[4].title} description={formSteps[4].description}>
-                    <div className="px-4 py-3">
+                    <div className="px-2 sm:px-4 py-3 w-full">
                       <motion.div 
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="bg-[#faf7f5] rounded-xl p-6"
+                        className="bg-[#faf7f5] rounded-xl p-4 sm:p-6"
                       >
-                        <h3 className="text-xl font-bold mb-4">Review Your Sandwich</h3>
+                        <h3 className="text-lg sm:text-xl font-bold mb-4">Review Your Sandwich</h3>
                         
                         {/* Preview of sandwich image */}
                         {formData.images.length > 0 && (
@@ -667,30 +666,30 @@ export default function CreateSandwichPage() {
                         
                         <div className="space-y-4">
                           <div>
-                            <h4 className="text-sm font-medium text-[#8c6a5a]">Sandwich Name</h4>
-                            <p className="text-lg font-medium">{formData.title}</p>
+                            <h4 className="text-xs sm:text-sm font-medium text-[#8c6a5a]">Sandwich Name</h4>
+                            <p className="text-base sm:text-lg font-medium">{formData.title}</p>
                           </div>
                           
                           <div>
-                            <h4 className="text-sm font-medium text-[#8c6a5a]">Description</h4>
-                            <p className="text-base">{formData.description}</p>
+                            <h4 className="text-xs sm:text-sm font-medium text-[#8c6a5a]">Description</h4>
+                            <p className="text-sm sm:text-base">{formData.description}</p>
                           </div>
                           
                           <div>
-                            <h4 className="text-sm font-medium text-[#8c6a5a]">Type</h4>
-                            <p className="text-base">{formData.type === "RESTAURANT" ? "Restaurant" : "Homemade"}</p>
+                            <h4 className="text-xs sm:text-sm font-medium text-[#8c6a5a]">Type</h4>
+                            <p className="text-sm sm:text-base">{formData.type === "RESTAURANT" ? "Restaurant" : "Homemade"}</p>
                           </div>
                           
                           {formData.type === "RESTAURANT" && (
                             <div>
-                              <h4 className="text-sm font-medium text-[#8c6a5a]">Restaurant</h4>
-                              <p className="text-base">{formData.restaurantName}</p>
+                              <h4 className="text-xs sm:text-sm font-medium text-[#8c6a5a]">Restaurant</h4>
+                              <p className="text-sm sm:text-base">{formData.restaurantName}</p>
                             </div>
                           )}
                           
                           {formData.type === "HOMEMADE" && (
                             <div>
-                              <h4 className="text-sm font-medium text-[#8c6a5a]">Ingredients</h4>
+                              <h4 className="text-xs sm:text-sm font-medium text-[#8c6a5a]">Ingredients</h4>
                               <div className="flex flex-wrap gap-2 mt-1">
                                 {formData.ingredients.map((ingredient, i) => (
                                   <span key={i} className="bg-[#eccebf] text-[#191310] text-xs font-medium px-2 py-1 rounded-full">
@@ -703,35 +702,35 @@ export default function CreateSandwichPage() {
                           
                           {formData.price && (
                             <div>
-                              <h4 className="text-sm font-medium text-[#8c6a5a]">Price</h4>
-                              <p className="text-base">${parseFloat(formData.price).toFixed(2)}</p>
+                              <h4 className="text-xs sm:text-sm font-medium text-[#8c6a5a]">Price</h4>
+                              <p className="text-sm sm:text-base">£{parseFloat(formData.price).toFixed(2)}</p>
                             </div>
                           )}
                           
                           <div>
-                            <h4 className="text-sm font-medium text-[#8c6a5a]">Ratings</h4>
+                            <h4 className="text-xs sm:text-sm font-medium text-[#8c6a5a]">Ratings</h4>
                             <div className="grid grid-cols-2 gap-2 mt-1">
                               <div>
                                 <span className="text-xs text-[#8c6a5a]">Overall:</span> 
-                                <span className="ml-1 font-medium">{parseFloat(formData.overallRating).toFixed(1)} / 10</span>
+                                <span className="ml-1 font-medium text-xs sm:text-sm">{parseFloat(formData.overallRating).toFixed(1)} / 10</span>
                               </div>
                               <div>
                                 <span className="text-xs text-[#8c6a5a]">Taste:</span> 
-                                <span className="ml-1 font-medium">{parseFloat(formData.tasteRating).toFixed(1)} / 10</span>
+                                <span className="ml-1 font-medium text-xs sm:text-sm">{parseFloat(formData.tasteRating).toFixed(1)} / 10</span>
                               </div>
                               <div>
                                 <span className="text-xs text-[#8c6a5a]">Texture:</span> 
-                                <span className="ml-1 font-medium">{parseFloat(formData.textureRating).toFixed(1)} / 10</span>
+                                <span className="ml-1 font-medium text-xs sm:text-sm">{parseFloat(formData.textureRating).toFixed(1)} / 10</span>
                               </div>
                               <div>
                                 <span className="text-xs text-[#8c6a5a]">Presentation:</span> 
-                                <span className="ml-1 font-medium">{parseFloat(formData.presentationRating).toFixed(1)} / 10</span>
+                                <span className="ml-1 font-medium text-xs sm:text-sm">{parseFloat(formData.presentationRating).toFixed(1)} / 10</span>
                               </div>
                             </div>
                           </div>
                           
                           <div>
-                            <h4 className="text-sm font-medium text-[#8c6a5a]">Photos</h4>
+                            <h4 className="text-xs sm:text-sm font-medium text-[#8c6a5a]">Photos</h4>
                             <div className="flex gap-2 mt-1 overflow-x-auto pb-2">
                               {formData.images.map((url, i) => (
                                 <div key={i} className="w-16 h-16 flex-shrink-0 rounded-md overflow-hidden relative">
@@ -749,12 +748,12 @@ export default function CreateSandwichPage() {
             </AnimatePresence>
             
             {/* Navigation buttons */}
-            <div className="flex px-4 py-6 justify-between">
+            <div className="flex px-2 sm:px-4 py-4 sm:py-6 justify-between w-full">
               {currentStep > 0 && (
                 <motion.button
                   type="button"
                   onClick={handlePrevStep}
-                  className="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#f1ece9] text-[#191310] text-sm font-medium leading-normal tracking-[0.015em] hover:bg-[#e3d9d3] transition-colors"
+                  className="flex min-w-[70px] sm:min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-3 sm:px-4 bg-[#f1ece9] text-[#191310] text-xs sm:text-sm font-medium leading-normal tracking-[0.015em] hover:bg-[#e3d9d3] transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -766,7 +765,7 @@ export default function CreateSandwichPage() {
                 <motion.button
                   type="button"
                   onClick={handleNextStep}
-                  className="flex min-w-[84px] ml-auto cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#eccebf] text-[#191310] text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#e3c0a9] transition-colors"
+                  className="flex min-w-[70px] sm:min-w-[84px] ml-auto cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-3 sm:px-4 bg-[#eccebf] text-[#191310] text-xs sm:text-sm font-bold leading-normal tracking-[0.015em] hover:bg-[#e3c0a9] transition-colors"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -776,7 +775,7 @@ export default function CreateSandwichPage() {
                 <motion.button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex min-w-[84px] ml-auto cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-4 bg-[#eccebf] text-[#191310] text-sm font-bold leading-normal tracking-[0.015em] disabled:opacity-50 hover:bg-[#e3c0a9] transition-colors"
+                  className="flex min-w-[70px] sm:min-w-[84px] ml-auto cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 px-3 sm:px-4 bg-[#eccebf] text-[#191310] text-xs sm:text-sm font-bold leading-normal tracking-[0.015em] disabled:opacity-50 hover:bg-[#e3c0a9] transition-colors"
                   whileHover={{ scale: isSubmitting ? 1 : 1.05 }}
                   whileTap={{ scale: isSubmitting ? 1 : 0.95 }}
                 >
