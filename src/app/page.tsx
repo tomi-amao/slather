@@ -128,7 +128,7 @@ export default async function Home() {
                   className="group inline-flex items-center justify-center gap-3 bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:scale-105"
                 >
                   <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" />
-                  <span className="font-semibold text-lg">Create Sandwich Post</span>
+                  <span className="font-semibold text-lg">Drop a Sammie</span>
                   <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
                 </Link>
               </div>
